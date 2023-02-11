@@ -1,0 +1,6 @@
+/nbproject/
+/vendor/
+/composer.lock
+/Test/temp/*
+!.gitkeep
+.phpunit.result.cache
