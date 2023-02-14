@@ -62,7 +62,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
 
         unset($s);
         $s = new Session($config, $storage);
-        var_dump(count($container));
         $this->assertTrue($s->isSessionUp());
         $s->logout();
         $this->assertFalse($s->isSessionUp());
