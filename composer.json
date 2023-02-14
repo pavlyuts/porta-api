@@ -1,0 +1,42 @@
+{
+    "name": "pavlyuts/porta-api",
+    "description": "PortaOne billing API wrapper",
+    "type": "library",
+    "homepage": "https://github.com/pavlyuts/porta-api",
+    "keywords": ["portaone", "billing", "api", "portastart"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexey Pavlyuts",
+            "email": "alexey@pavlyuts.ru"
+        }
+    ],
+    "support": {
+        "email": "alexey@pavlyuts.ru",
+        "issues": "https://github.com/pavlyuts/porta-api/issues",
+        "wiki": "https://github.com/pavlyuts/porta-api/wiki",
+        "source": "https://github.com/pavlyuts/porta-api"
+    },
+    "require": {
+        "php": "^7.2",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PortaApi\\": "PortaApi"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5",
+        "firebase/php-jwt": "*"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PortaApiTest\\": "Test",
+            "PortaApiTest\\Tools\\": "Tools"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --configuration Test/configuration.xml Test --coverage-text"
+    }
+}

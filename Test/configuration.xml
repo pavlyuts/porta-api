@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+PortaOne Billing JSON API wrapper
+API docs: https://docs.portaone.com
+(c) Alexey Pavlyuts <alexey@pavlyuts.ru>
+-->
+<phpunit colors="false">
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../PortaApi/</directory>
+            <directory suffix=".php">../Tools/</directory>
+            <exclude>
+                <file>../PortaApi/Session/SessionPHPSessionStorage.php</file>
+                <file>../Tools/file-locker-child.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
