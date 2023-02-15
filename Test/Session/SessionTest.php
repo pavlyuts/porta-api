@@ -67,7 +67,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse($s->isSessionUp());
         $request = $container[1]['request'];
         $this->assertEquals('/rest/Session/logout', $request->getUri()->getPath());
-        $this->assertEquals([], json_decode($request->getBody(), true));
+        $this->assertEquals(['params' => [Session::ACCESS_TOKEN => $loginAnswer[Session::ACCESS_TOKEN]]], json_decode($request->getBody(), true));
         $this->assertNull($storage->load());
     }
 
@@ -232,7 +232,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $s = new Session(self::CONFIG_MIN);
         $this->assertNull($s->getUsername());
     }
-    
+
     public function testLogoutFromEmpty() {
         $s = new Session(self::CONFIG_MIN);
         $this->assertNull($s->logout());
