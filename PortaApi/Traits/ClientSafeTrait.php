@@ -8,13 +8,8 @@
 
 namespace PortaApi\Traits;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PortaApi\Exceptions\PortaException;
-use PortaApi\Exceptions\PortaApiException;
-use PortaApi\Config;
 
 /**
  * Trait to use Guzzle client with arror handling and re-login
