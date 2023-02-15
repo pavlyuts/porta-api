@@ -53,7 +53,7 @@ class ESPF {
      * @throws PortaESPFException on ESPF api error, check error coode with API docs
      */
     public function post(string $endpoint, array $params = []): array {
-        $response = $this->requestSafe('POST', $endpoint, ([] == $params) ? [] : [RO::JSON => $params]);
+        $response = $this->requestSafe('POST', $endpoint, ([] == $params) ? [] : [RO::JSON => ([] == ($params ?? [])) ? new \stdClass() : $params]);
         return $this->jsonResponse($response);
     }
 
@@ -67,7 +67,7 @@ class ESPF {
      * @throws PortaESPFException on ESPF api error, check error coode with API docs
      */
     public function put(string $endpoint, array $params): array {
-        $response = $this->requestSafe('PUT', $endpoint, [RO::JSON => $params]);
+        $response = $this->requestSafe('PUT', $endpoint, [RO::JSON => ([] == ($params ?? [])) ? new \stdClass() : $params]);
         return $this->jsonResponse($response);
     }
 

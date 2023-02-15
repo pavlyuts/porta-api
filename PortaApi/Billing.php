@@ -48,7 +48,14 @@ class Billing {
      * @throws PortaApiException on API returned an error
      */
     public function call(string $endpoint, array $params = []): array {
-        $response = $this->requestSafe('POST', $endpoint, [\GuzzleHttp\RequestOptions::JSON => [Config::PARAMS => $params]]);
+        $response = $this->requestSafe('POST', $endpoint,
+                [
+                    \GuzzleHttp\RequestOptions::JSON =>
+                    [
+                        Config::PARAMS => ([] == ($params ?? [])) ? new \stdClass() : $params,
+                    ]
+                ]
+        );
         switch (static::detectContentType($response)) {
             case 'application/json':
                 return static::jsonResponse($response);
