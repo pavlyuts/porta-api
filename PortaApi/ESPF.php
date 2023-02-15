@@ -19,8 +19,8 @@ use GuzzleHttp\Psr7\Response;
  */
 class ESPF {
 
-    use Traits\ClientSafeTrait;
-    use Traits\SessionTrait;
+    use \PortaApi\Traits\ClientSafeTrait;
+    use \PortaApi\Traits\SessionTrait;
 
     function __construct(array $config, SessionStorageInterface $storage = null) {
         $this->setupClient($config, Config::ESPF_BASE);
