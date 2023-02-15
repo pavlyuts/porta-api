@@ -99,7 +99,8 @@ class Session {
         if (!$this->isSessionUp()) {
             return;
         }
-        $response = $this->request('POST', '/Session/logout', [RO::JSON => []]);
+        $response = $this->request('POST', '/Session/logout',
+                [RO::JSON => [C::PARAMS => [self::ACCESS_TOKEN => $this->sessionData[self::ACCESS_TOKEN]]]]);
         if (200 !== $response->getStatusCode()) {
             throw PortaApiException::createFromResponse($response);
         }
