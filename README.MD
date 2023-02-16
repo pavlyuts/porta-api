@@ -30,6 +30,10 @@ Please, also refer to [PortaOne documentation](https://docs.portaone.com/). Mind
 ## Testing
 Tested with PHPUnit 8.5 on php 7.2 and 7.4, up to 100% coverage, which does not mean everything will work as intended.
 
-To test, install in dev mode and use `composer test` command from library root.
+To test, install in dev mode and use: 
+- `composer test` command from library root for run all standard modular tests
+- `composer livetest` to run a test against live PortaBilling server.
+
+For live testing run `livetest` once and it will create config file templeate. Then edit the file to provide host, username and password or token and run `livetest` again. Do not forget to remove the config file after tests!
 
 Manualy tested and used with PortaBilling release MR100.

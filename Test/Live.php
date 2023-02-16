@@ -36,7 +36,7 @@ class Live extends \PHPUnit\Framework\TestCase {
             . "    ]\n"
             . "];\n";
     const CONFIG_FILE = __DIR__ . '/temp/live-test-config.php';
-    const NO_CONFIG_MESSAGE = "Live test need config fie with host and account\nConfig file created from template at:\n" . self::CONFIG_FILE
+    const NO_CONFIG_MESSAGE = "Live test need config file with host and account\nConfig file created from template at:\n" . self::CONFIG_FILE
             . "\nPlease fill the template with host and account data and run live test again.\n"
             . "Do not forget to remove the file with credentials after test finished!";
 
