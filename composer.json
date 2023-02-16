@@ -37,6 +37,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --configuration Test/configuration.xml Test --coverage-text"
+        "test": "vendor/bin/phpunit --configuration Test/configuration.xml Test --coverage-text",
+        "livetest": "vendor/bin/phpunit --configuration Test/configuration.xml Test/Live.php "
     }
 }
