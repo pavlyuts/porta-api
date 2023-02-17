@@ -57,17 +57,24 @@ class Live extends \PHPUnit\Framework\TestCase {
     }
 
     public function testGetCustomers() {
-        $result = self::$billing->call('/Customer/get_customer_list', ['limit' => 5]);
+        $result = self::$billing->call('/Customer/get_customer_list', ['limit' => 50]);
         $this->assertArrayHasKey('customer_list', $result);
-        return $result['customer_list'][0];
+        return $result['customer_list'];
     }
 
     /**
      * @depends testGetCustomers
      */
-    public function testGetCustomerInfo($customer) {
-        $result = self::$billing->call('/Customer/get_customer_info', ['i_customer' => $customer['i_customer']]);
-        $this->assertArrayHasKey('customer_info', $result);
+    public function testGetCustomerInfo($customerList) {
+        $list = [];
+        foreach ($customerList as $customer) {
+            $list[] = new \PortaApi\AsyncOperation('/Customer/get_customer_info', ['i_customer' => $customer['i_customer']]);
+        }
+        self::$billing->callAsync($list);
+        foreach ($list as $item) {
+            $this->assertTrue($item->success());
+            $this->assertArrayHasKey('customer_info', $item->getResponse());
+        }
     }
 
     public function testGetCountries() {

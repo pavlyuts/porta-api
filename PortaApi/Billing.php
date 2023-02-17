@@ -66,6 +66,58 @@ class Billing {
         }
     }
 
+    /**
+     * Perform bulk async billig call running multiple concurrent requests at once.
+     * It will validate session to the billing before bulk call to be safe and throw
+     * exception if session is not valid.
+     * 
+     * @param Traversable $operations array or any other traversable list of  of 
+     *        objects, implementing BillingAsyncOperationInterface. Data for billing
+     *        call wil be taken from the objects and each call result or exception
+     *        will be put into the object
+     * 
+     * @param int $concurency - how much calls to run in parallel. Default is 20.
+     * 
+     * @throws PortaAuthException
+     */
+    public function callAsync(iterable $operations, int $concurency = 20) {
+        $this->checkAsyncObjectList($operations);
+        if (!$this->session->checkSession()) {
+            throw new PortaAuthException("No active session to run async request");
+        }
+
+        $client = $this->getClient();
+        $base = $this->base;
+        $tasksIterator = function () use ($client, $operations, $base) {
+            foreach ($operations as $index => $operation) {
+                if (null === $operation->getCall()) {
+                    continue;
+                } else {
+                    $func = function () use ($client, $base, $operations, $index) {
+                        $callData = $operations[$index]->getCall();
+                        return $promise = $client->postAsync($base . $callData[0] ?? 'null', Billing::prepareParamsJson($callData[1] ?? []))
+                        ->then(
+                        function (Response $response) use ($operations, $index) {
+                            if (200 == $response->getStatusCode()) {
+                                $operations[$index]->processResponse(Billing::jsonResponse($response));
+                            } else {
+                                $operations[$index]->processException(PortaApiException::createFromResponse($response));
+                            }
+                        },
+                        function (\GuzzleHttp\Exception\ConnectException $reason) use ($operations, $index) {
+                            $operations[$index]->processException(new PortaConnectException($reason->getMessage(), $reason->getCode()));
+                        }
+                        );
+                    };
+                    yield $func;
+                }
+            }
+        };
+        $pool = new Pool($client, $tasksIterator(), ['concurrency' => $concurency]);
+        $promise = $pool->promise();
+        $promise->wait();
+    }
+
     protected static function detectContentType(Response $response): string {
         $parsed = Header::parse($response->getHeader('content-type'));
         return $parsed[0][0] ?? 'unknown';
@@ -108,4 +160,13 @@ class Billing {
             ]
         ];
     }
+
+    protected function checkAsyncObjectList(iterable $operations) {
+        foreach ($operations as $operation) {
+            if (!($operation instanceof AsyncOperationInterface)) {
+                throw new PortaException("Objects for async call should implement AsyncOperationInterface");
+            }
+        }
+    }
+
 }
