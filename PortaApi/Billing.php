@@ -8,12 +8,18 @@
 
 namespace PortaApi;
 
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Header;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 use PortaApi\Config as C;
-use PortaApi\Session\SessionStorageInterface;
 use PortaApi\Exceptions\PortaException;
 use PortaApi\Exceptions\PortaApiException;
 use PortaApi\Exceptions\PortaAuthException;
-use GuzzleHttp\Psr7\Response;
+use PortaApi\Exceptions\PortaConnectException;
+use PortaApi\Session\SessionStorageInterface;
+use PortaApi\Traits\SessionTrait;
+use PortaApi\Traits\ClientSafeTrait;
 
 /**
  * Base class, provides authorisation, session management and http call capability
@@ -21,8 +27,8 @@ use GuzzleHttp\Psr7\Response;
  */
 class Billing {
 
-    use \PortaApi\Traits\ClientSafeTrait;
-    use \PortaApi\Traits\SessionTrait;
+    use ClientSafeTrait;
+    use SessionTrait;
 
     function __construct(array $config, SessionStorageInterface $storage = null) {
         $this->setupClient($config, C::API_BASE);
@@ -61,12 +67,12 @@ class Billing {
     }
 
     protected static function detectContentType(Response $response): string {
-        $parsed = \GuzzleHttp\Psr7\Header::parse($response->getHeader('content-type'));
+        $parsed = Header::parse($response->getHeader('content-type'));
         return $parsed[0][0] ?? 'unknown';
     }
 
     protected static function extractFile(Response $response) {
-        $parsed = \GuzzleHttp\Psr7\Header::parse($response->getHeader('content-disposition'));
+        $parsed = Header::parse($response->getHeader('content-disposition'));
         if ((($parsed[0][0] ?? '') != 'attachment') || !isset($parsed[0]['filename'])) {
             throw new PortaException("Invalid file content-disposition header");
         }
