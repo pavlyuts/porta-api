@@ -180,4 +180,16 @@ class BillingTest extends \PHPUnit\Framework\TestCase {
         $b->callAsync([new AsyncOperation('/test')]);
     }
 
+    public function testCallList() {
+        $mock = new MockHandler([
+            new Response(200, ['content-type' => 'application/json'], '{"something_list": {"key1":"value1", "key2":"value2"}}'),
+            new Response(200, ['content-type' => 'application/json'], '{"key3":"value3", "key4":"value4"}'),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
+        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2'], $b->callList('/nomatter'));
+        $this->assertEquals(['key3' => 'value3', 'key4' => 'value4'], $b->callList('/nomatter'));
+    }
+
 }

@@ -118,6 +118,32 @@ class Billing {
         $promise->wait();
     }
 
+    /**
+     * Same as call(), but if IPI returns an array with one element (basially it
+     * has key like 'customer_list'), it will cut one level and return the list 
+     * itself. If Billing returns more that one element on the top level, it returns 
+     * the whole array. Sample: instead of ['customer_list' => [{customer data here}]]
+     * it will return [{customer data here}] array directly.
+     * 
+     * @param string $endpoint - API endpoint as per docs, exapmle: '/Customer/get_customer_info'
+     * @param array $params - API requst data to put into "params" section
+     * 
+     * @return array Billing system answer, converted to associative array, cut 
+     *               one level if the returned array has only one key on the top level.
+     *               If billing retuns file, returns array of two keys: 
+     *               'filename' => string, returned file name, 
+     *               'stream' => PSR-7 stream object with file
+     * 
+     * @throws PortaException on general errors
+     * @throws PortaAuthException on auth-related errors
+     * @throws PortaApiException on API returned an error
+     */
+    public function callList(string $endpoint, array $params = []) {
+        $answer = $this->call($endpoint, $params);
+        $keys = array_keys($answer);
+        return (count($keys) > 1) ? $answer : $answer[$keys[0]];
+    }
+
     protected static function detectContentType(Response $response): string {
         $parsed = Header::parse($response->getHeader('content-type'));
         return $parsed[0][0] ?? 'unknown';
