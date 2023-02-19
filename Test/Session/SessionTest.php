@@ -46,7 +46,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $loginAnswer = PortaToken::createLoginData(5000);
         $mock = new MockHandler([
             new Response(200, [], json_encode($loginAnswer)),
-            new Response(200, [], '{"success": 1}'),
         ]);
         $handlerStack = HandlerStack::create($mock);
         $container = [];
@@ -59,16 +58,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals('/rest/Session/login', $request->getUri()->getPath());
         $this->assertEquals(['params' => $config[C::ACCOUNT]], json_decode($request->getBody(), true));
         $this->assertEquals($loginAnswer, $storage->load());
-
-        unset($s);
-        $s = new Session($config, $storage);
-        $this->assertTrue($s->isSessionUp());
-        $s->logout();
-        $this->assertFalse($s->isSessionUp());
-        $request = $container[1]['request'];
-        $this->assertEquals('/rest/Session/logout', $request->getUri()->getPath());
-        $this->assertEquals(['params' => [Session::ACCESS_TOKEN => $loginAnswer[Session::ACCESS_TOKEN]]], json_decode($request->getBody(), true));
-        $this->assertNull($storage->load());
     }
 
     public function testFromEmptyViaLogin() {
@@ -76,7 +65,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $loginAnswer = PortaToken::createLoginData(5000);
         $mock = new MockHandler([
             new Response(200, [], json_encode($loginAnswer)),
-            new Response(500, [], ''),
         ]);
         $handlerStack = HandlerStack::create($mock);
         $container = [];
@@ -92,8 +80,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals('/rest/Session/login', $request->getUri()->getPath());
         $this->assertEquals(['params' => self::CONFIG_ACCOUNT[C::ACCOUNT]], json_decode($request->getBody(), true));
         $this->assertEquals($loginAnswer, $storage->load());
-        $this->expectException(PortaException::class);
-        $s->logout();
     }
 
     /**
@@ -233,9 +219,49 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $this->assertNull($s->getUsername());
     }
 
-    public function testLogoutFromEmpty() {
+    public function testLogout() {
+        $config = self::CONFIG_MIN;
+        $mock = new MockHandler([
+            new Response(200, [], '{"success": 1}'),
+            new Response(500, [], '{"faultcode":"Server.Session.logout.session_id_does_not_exists","faultstring":"Session id is expired or doesn\'t exist"}'),
+            new Response(500, [], '{"faultcode":"SomeFaultCode","faultstring":"SomeFaultString"}'),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $container = [];
+        $handlerStack->push(Middleware::history($container));
+        $sessionData = PortaToken::createLoginData(7200);
+        $storage = new SessionPHPClassStorage($sessionData);
+        $config[C::OPTIONS]['handler'] = $handlerStack;
+
+        //Test normal logout
+        $s = new Session($config, $storage);
+        $this->assertTrue($s->isSessionUp());
+        $s->logout();
+        $this->assertFalse($s->isSessionUp());
+        $request = $container[0]['request'];
+        $this->assertEquals('/rest/Session/logout', $request->getUri()->getPath());
+        $this->assertEquals(['params' => [Session::ACCESS_TOKEN => $sessionData[Session::ACCESS_TOKEN]]], json_decode($request->getBody(), true));
+        $this->assertNull($storage->load());
+
+        //Test logout on expired sesson
+        $storage = new SessionPHPClassStorage($sessionData);
+        $s = new Session($config, $storage);
+        $this->assertTrue($s->isSessionUp());
+        $s->logout();
+        $this->assertFalse($s->isSessionUp());
+
+        //Test logout from empty
         $s = new Session(self::CONFIG_MIN);
-        $this->assertNull($s->logout());
+        $this->assertFalse($s->isSessionUp());
+        $s->logout();
+        $this->assertFalse($s->isSessionUp());
+
+        //Test exception on logout error
+        $storage = new SessionPHPClassStorage($sessionData);
+        $s = new Session($config, $storage);
+        $this->assertTrue($s->isSessionUp());
+        $this->expectException(\PortaApi\Exceptions\PortaApiException::class);
+        $s->logout();
     }
 
 }
