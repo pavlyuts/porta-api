@@ -99,12 +99,12 @@ class Session {
         if (!$this->isSessionUp()) {
             return;
         }
-        $response = $this->request('POST', '/Session/logout',
-                [RO::JSON => [C::PARAMS => [self::ACCESS_TOKEN => $this->sessionData[self::ACCESS_TOKEN]]]]);
-        if (200 != $response->getStatusCode()) {
-            $err = PortaApiException::createFromResponse($response);
-            if (!($err instanceof PortaApiException) || ($err->getPortaCode() != 'Server.Session.logout.session_id_does_not_exists')) {
-                throw $err;
+        try {
+            $response = $this->request('POST', '/Session/logout',
+                    [RO::JSON => [C::PARAMS => [self::ACCESS_TOKEN => $this->sessionData[self::ACCESS_TOKEN]]]]);
+        } catch (PortaException $ex) {
+            if ($ex instanceof \PortaApi\Exceptions\PortaConnectException) {
+                throw $ex;
             }
         }
         $this->sessionDrop();
