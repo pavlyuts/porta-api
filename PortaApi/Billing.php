@@ -55,8 +55,6 @@ class Billing {
      */
     public function call(string $endpoint, array $params = []): array {
         $response = $this->requestSafe('POST', $endpoint, self::prepareParamsJson($params));
-        file_put_contents("/integrator/tools/log/answer.log",$response->getBody());
-        error_log("Billing response: \n" . $response->getBody());
         switch (static::detectContentType($response)) {
             case 'application/json':
                 return static::jsonResponse($response);
@@ -178,7 +176,6 @@ class Billing {
     }
 
     protected function processPortaError($response): void {
-        error_log("$response->getBody());
         throw PortaApiException::createFromResponse($response);
     }
 
