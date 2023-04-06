@@ -55,6 +55,8 @@ class Billing {
      */
     public function call(string $endpoint, array $params = []): array {
         $response = $this->requestSafe('POST', $endpoint, self::prepareParamsJson($params));
+        file_put_contents("/integrator/tools/log/answer.log",$response->getBody());
+        error_log("Billing response: \n" . $response->getBody());
         switch (static::detectContentType($response)) {
             case 'application/json':
                 return static::jsonResponse($response);
@@ -169,12 +171,14 @@ class Billing {
                 [
                     'Server.Session.check_auth.auth_failed',
                     'Client.check_auth.envelope_missed',
-                    'Client.Session.check_auth.failed_to_process_jwt'
+                    'Client.Session.check_auth.failed_to_process_jwt',
+                    'Client.Session.check_auth.failed_to_process_access_token'
                 ]
         );
     }
 
     protected function processPortaError($response): void {
+        error_log("$response->getBody());
         throw PortaApiException::createFromResponse($response);
     }
 
