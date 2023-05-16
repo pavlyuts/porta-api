@@ -95,7 +95,7 @@ trait ClientTrait {
      *                         as defined at https://www.php.net/manual/en/datetimezone.construct.php
      * @return \DateTime
      */
-    public static function timeToLocal(string $billingTime, string $timezone = UTC): \DateTime {
+    public static function timeToLocal(string $billingTime, string $timezone = 'UTC'): \DateTime {
         return (new \DateTime($billingTime, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($timezone));
     }
 
