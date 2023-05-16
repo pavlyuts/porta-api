@@ -260,8 +260,8 @@ class SessionTest extends \PHPUnit\Framework\TestCase {
         $storage = new SessionPHPClassStorage($sessionData);
         $s = new Session($config, $storage);
         $this->assertTrue($s->isSessionUp());
-        $this->expectException(\PortaApi\Exceptions\PortaApiException::class);
         $s->logout();
+        $this->assertFalse($s->isSessionUp());
     }
 
 }
