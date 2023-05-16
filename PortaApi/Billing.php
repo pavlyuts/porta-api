@@ -131,7 +131,8 @@ class Billing {
      * @return array Billing system answer, converted to associative array, cut 
      *               one level if the returned array has only one key on the top level.
      *               If billing retuns file, returns array of two keys: 
-     *               'filename' => string, returned file name, 
+     *               'filename' => string, returned file name,
+     *               'mime' => string, content-type, 
      *               'stream' => PSR-7 stream object with file
      * 
      * @throws PortaException on general errors
@@ -156,6 +157,7 @@ class Billing {
         }
         return [
             'filename' => $parsed[0]['filename'],
+            'mime' => static::detectContentType($response),
             'stream' => $response->getBody(),
         ];
     }
