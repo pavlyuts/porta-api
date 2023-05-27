@@ -42,7 +42,7 @@ class SessionFileStorageTest extends \PHPUnit\Framework\TestCase {
             unlink(self::FILE);
         }
         $s = new SessionFileStorage(self::FILE);
-        $this->assertFileNotExists(self::FILE . SessionFileStorage::UPD_POSTFIX);
+        $this->assertFileDoesNotExist(self::FILE . SessionFileStorage::UPD_POSTFIX);
 
         //Test it setup locks and semaphore files right way
         $this->assertTrue($s->startUpdate());
@@ -52,7 +52,7 @@ class SessionFileStorageTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($s->startUpdate());
         // --destruct must cleanup if there was no save() call
         unset($s);
-        $this->assertFileNotExists(self::FILE . SessionFileStorage::UPD_POSTFIX);
+        $this->assertFileDoesNotExist(self::FILE . SessionFileStorage::UPD_POSTFIX);
 
         //Check it return false if see other's lock adn do not remove another's lockfile
         touch(self::FILE . SessionFileStorage::UPD_POSTFIX);
@@ -74,7 +74,7 @@ class SessionFileStorageTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(
                 json_encode(self::TEST_DATA, JSON_UNESCAPED_UNICODE + JSON_PRETTY_PRINT),
                 file_get_contents(self::FILE));
-        $this->assertFileNotExists(self::FILE . SessionFileStorage::UPD_POSTFIX);
+        $this->assertFileDoesNotExist(self::FILE . SessionFileStorage::UPD_POSTFIX);
     }
 
     public function testLoad() {
@@ -95,7 +95,7 @@ class SessionFileStorageTest extends \PHPUnit\Framework\TestCase {
         file_put_contents(self::FILE_BAD, "NoJsonHere");
         $s = new SessionFileStorage(self::FILE_BAD);
         $this->assertNull($s->load());
-        $this->assertFileNotExists(self::FILE_BAD);
+        $this->assertFileDoesNotExist(self::FILE_BAD);
     }
 
     public function testSaveExceptionNoStartUpdate() {
@@ -108,7 +108,7 @@ class SessionFileStorageTest extends \PHPUnit\Framework\TestCase {
         $this->assertFileExists(self::FILE);
         $s = new SessionFileStorage(self::FILE);
         $s->clean();
-        $this->assertFileNotExists(self::FILE);
+        $this->assertFileDoesNotExist(self::FILE);
     }
 
     public function testUnwritableLocation_1() {
