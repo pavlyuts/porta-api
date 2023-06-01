@@ -8,13 +8,15 @@
 
 namespace Porta\Billing\Session;
 
+use Porta\Billing\Interfaces\SessionStorageInterface;
+
 /**
  * Class to use PHP Session storage.
- * 
- * Mind that use of session locks any other php request from the same session 
+ *
+ * Mind that use of session locks any other php request from the same session
  * will wait for session unlocked and this implementation rey on that.
- * 
- * If you use session_write_close() to release the session, please do it AFTER 
+ *
+ * If you use session_write_close() to release the session, please do it AFTER
  * the billing ombject setup for it may login or refresh token safe way.
  *
  */
@@ -32,7 +34,7 @@ class SessionPHPSessionStorage implements SessionStorageInterface {
         unset($_SESSION[static::SESSION_STORAGE_NAME]);
     }
 
-    public function startUpdate():bool {
+    public function startUpdate(): bool {
         return true;
     }
 

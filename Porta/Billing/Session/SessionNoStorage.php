@@ -8,6 +8,8 @@
 
 namespace Porta\Billing\Session;
 
+use Porta\Billing\Interfaces\SessionStorageInterface;
+
 /**
  * Dummy storage to use when no storage given.
  *

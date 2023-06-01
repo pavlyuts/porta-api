@@ -8,9 +8,9 @@
 
 namespace Porta\Billing\Components;
 
-use Porta\Billing\PortaConfigInterface;
+use Porta\Billing\Interfaces\ConfigInterface;
 use Porta\Billing\Components\SessionClient;
-use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Interfaces\SessionStorageInterface;
 use Porta\Billing\Session\SessionNoStorage;
 use Porta\Billing\Exceptions\PortaException;
 use Porta\Billing\Exceptions\PortaApiException;
@@ -30,11 +30,11 @@ class SessionManager {
     protected const TOKEN_EXPIRED = 'need_relogin';
 
     protected SessionClient $client;
-    protected PortaConfigInterface $config;
+    protected ConfigInterface $config;
     protected SessionData $sessionData;
     protected SessionStorageInterface $storage;
 
-    public function __construct(PortaConfigInterface $config, SessionClient $client, SessionStorageInterface $storage = null) {
+    public function __construct(ConfigInterface $config, SessionClient $client, SessionStorageInterface $storage = null) {
         $this->client = $client;
         $this->config = $config;
         $this->sessionData = new SessionData();

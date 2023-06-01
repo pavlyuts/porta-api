@@ -8,13 +8,14 @@
 
 namespace Porta\Billing;
 
+use Porta\Billing\Interfaces\ConfigInterface;
 use Porta\Billing\Exceptions\PortaAuthException;
 
 /**
  * Porta-API configuration class
  *
  */
-class PortaConfig implements PortaConfigInterface {
+class Config implements ConfigInterface {
 
     protected string $host;
     protected ?array $account = null;
@@ -75,10 +76,10 @@ class PortaConfig implements PortaConfigInterface {
     public function setAccount(?array $account = null): self {
         $account = ([] == $account) ? null : $account;
         if (!is_null($account) &&
-                (!isset($account[PortaConfigInterface::LOGIN]) ||
+                (!isset($account[ConfigInterface::LOGIN]) ||
                 !(
-                isset($account[PortaConfigInterface::PASSWORD]) ||
-                isset($account[PortaConfigInterface::TOKEN])))) {
+                isset($account[ConfigInterface::PASSWORD]) ||
+                isset($account[ConfigInterface::TOKEN])))) {
             throw new PortaAuthException("Invalid account record provided, need login+pass or login+token");
         }
         $this->account = $account;

@@ -8,7 +8,7 @@
 
 namespace Porta\Billing;
 
-use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Interfaces\ConfigInterface;
 use Porta\Billing\Exceptions\PortaESPFException;
 use GuzzleHttp\RequestOptions as RO;
 use GuzzleHttp\Psr7\Response;

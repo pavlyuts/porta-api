@@ -8,7 +8,7 @@
 
 namespace PortaApiTest;
 
-use Porta\Billing\PortaConfig;
+use Porta\Billing\Config;
 use Porta\Billing\Exceptions\PortaAuthException;
 
 /**
@@ -23,7 +23,7 @@ class PortaConfigTest extends \PHPUnit\Framework\TestCase {
     const OPTIONS = ['option' => 'value'];
 
     public function testConstructDefaulats() {
-        $c = new PortaConfig(self::HOST);
+        $c = new Config(self::HOST);
         $this->assertEquals('https://' . self::HOST . '/rest', $c->getApiUrl());
         $this->assertEquals('https://' . self::HOST . '/espf/v1', $c->getEspfUrl());
         $this->assertFalse($c->hasAccount());
@@ -32,7 +32,7 @@ class PortaConfigTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testConstruct() {
-        $c = new PortaConfig(self::HOST, self::ACCOUNT_PASS, self::OPTIONS, 7200);
+        $c = new Config(self::HOST, self::ACCOUNT_PASS, self::OPTIONS, 7200);
         $this->assertEquals('https://' . self::HOST . '/rest', $c->getApiUrl());
         $this->assertEquals('https://' . self::HOST . '/espf/v1', $c->getEspfUrl());
         $this->assertTrue($c->hasAccount());
@@ -57,7 +57,7 @@ class PortaConfigTest extends \PHPUnit\Framework\TestCase {
      * @dataProvider accountData
      */
     public function testSetAccount($account, $good) {
-        $c = new PortaConfig(self::HOST);
+        $c = new Config(self::HOST);
         if (!$good) {
             $this->expectException(PortaAuthException::class);
         }
@@ -66,14 +66,14 @@ class PortaConfigTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testNullAccount() {
-        $c = new PortaConfig(self::HOST);
+        $c = new Config(self::HOST);
         $c->setAccount();
         $this->expectException(PortaAuthException::class);
         $c->getAccount();
     }
 
     public function testOptions() {
-        $c = new PortaConfig(self::HOST);
+        $c = new Config(self::HOST);
         $this->assertEquals([], $c->getOptions());
         $this->assertEquals($c, $c->setOptions(self::OPTIONS));
         $this->assertEquals(self::OPTIONS, $c->getOptions());

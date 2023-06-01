@@ -8,6 +8,7 @@
 
 namespace Porta\Billing;
 
+use Porta\Billing\Interfaces\AsyncOperationInterface;
 use Porta\Billing\Exceptions\PortaException;
 
 /**

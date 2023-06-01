@@ -10,7 +10,7 @@ namespace PortaApiTest\Components;
 
 use Porta\Billing\Components\SessionClient;
 use Porta\Billing\Components\SessionManager;
-use Porta\Billing\PortaConfig;
+use Porta\Billing\Config;
 use PortaApiTest\Tools\SessionPHPClassStorage;
 use PortaApiTest\Tools\PortaToken;
 use GuzzleHttp\Psr7\Response;
@@ -22,7 +22,7 @@ use GuzzleHttp\RequestOptions as RO;
 class SessionClientTest extends \PortaApiTest\Tools\RequestTestCase {
 
     public function testRequest() {
-        $conf = (new PortaConfig('testhost.dom'))
+        $conf = (new Config('testhost.dom'))
                 ->setOptions(
                 $this->prepareRequests([
                     new Response(200, [], 'success'),

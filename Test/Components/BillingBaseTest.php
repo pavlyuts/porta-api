@@ -9,7 +9,7 @@
 namespace PortaApiTest\Components;
 
 use Porta\Billing\Components\BillingBase;
-use Porta\Billing\PortaConfig;
+use Porta\Billing\Config;
 use PortaApiTest\Tools\SessionPHPClassStorage;
 use PortaApiTest\Tools\PortaToken;
 use GuzzleHttp\Psr7\Response;
@@ -22,7 +22,7 @@ class BillingBaseTest extends \PortaApiTest\Tools\RequestTestCase {
     const ACCOUNT = ['login' => 'username', 'password' => 'password'];
 
     public function testSessionForwarded() {
-        $config = (new PortaConfig('host.dom', self::ACCOUNT))
+        $config = (new Config('host.dom', self::ACCOUNT))
                 ->setOptions($this->prepareRequests(
                         [
                             new Response(200),

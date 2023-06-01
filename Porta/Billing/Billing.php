@@ -10,6 +10,9 @@ namespace Porta\Billing;
 
 use Porta\Billing\Components\BillingBase;
 use Porta\Billing\Components\SessionClient;
+use Porta\Billing\Interfaces\ConfigInterface;
+use Porta\Billing\Interfaces\SessionStorageInterface;
+use Porta\Billing\Interfaces\AsyncOperationInterface;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Header;
 use GuzzleHttp\Psr7\Response;
@@ -36,7 +39,7 @@ class Billing extends BillingBase {
      * @inherit
      * @api
      */
-    public function __construct(PortaConfigInterface $config, ?Session\SessionStorageInterface $storage = null) {
+    public function __construct(ConfigInterface $config, ?SessionStorageInterface $storage = null) {
         parent::__construct($config, $storage);
     }
 

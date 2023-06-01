@@ -6,7 +6,7 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace Porta\Billing\Session;
+namespace Porta\Billing\Interfaces;
 
 /**
  * Interface for session storage

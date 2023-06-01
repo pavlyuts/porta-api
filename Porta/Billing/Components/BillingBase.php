@@ -8,8 +8,8 @@
 
 namespace Porta\Billing\Components;
 
-use Porta\Billing\PortaConfigInterface;
-use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Interfaces\ConfigInterface;
+use Porta\Billing\Interfaces\SessionStorageInterface;
 use Porta\Billing\Exceptions\PortaException;
 use GuzzleHttp\Psr7\Response;
 
@@ -26,7 +26,7 @@ abstract class BillingBase {
      */
     public const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
-    protected PortaConfigInterface $config;
+    protected ConfigInterface $config;
     protected SessionClient $client;
     protected SessionManager $session;
 
@@ -40,11 +40,11 @@ abstract class BillingBase {
      * - If token expired or refresh failed - try to relogin if account data present, throwing exceptions on failures.
      * - If no accoount data present, just left the class un-logged-in, then you need login() to get it connected
      *
-     * @param PortaConfigInterface $config
+     * @param ConfigInterface $config
      * @param SessionStorageInterface|null $storage
      * @api
      */
-    public function __construct(PortaConfigInterface $config, ?SessionStorageInterface $storage = null) {
+    public function __construct(ConfigInterface $config, ?SessionStorageInterface $storage = null) {
         $this->config = $config;
         $this->client = new SessionClient($config);
         $this->session = new SessionManager($this->config, $this->client, $storage);

@@ -7,7 +7,7 @@
  */
 
 namespace PortaApiTest\Tools;
-use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Interfaces\SessionStorageInterface;
 
 /**
  * Store session in PHP class instance, mostly for teesting

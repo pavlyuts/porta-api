@@ -8,9 +8,8 @@
 
 namespace Porta\Billing\Components;
 
-use Porta\Billing\PortaConfigInterface;
+use Porta\Billing\Interfaces\ConfigInterface;
 use Porta\Billing\Components\SessionManager;
-use Porta\Billing\Session\SessionStorageInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
@@ -28,10 +27,10 @@ class SessionClient extends \GuzzleHttp\Client {
     /** Key for main API method params array */
     const PARAMS = 'params';
 
-    protected PortaConfigInterface $config;
+    protected ConfigInterface $config;
     protected SessionManager $session;
 
-    public function __construct(PortaConfigInterface $config) {
+    public function __construct(ConfigInterface $config) {
         $this->config = $config;
         parent::__construct(array_merge(
                         [

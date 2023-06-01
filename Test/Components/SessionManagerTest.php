@@ -8,11 +8,11 @@
 
 namespace PortaApiTest\Components;
 
-use Porta\Billing\PortaConfig;
+use Porta\Billing\Config;
 use Porta\Billing\Components\SessionClient;
 use Porta\Billing\Components\SessionManager;
 use Porta\Billing\Components\SessionData;
-use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Interfaces\SessionStorageInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
@@ -28,7 +28,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
 
     public function testLoadAndLogout() {
 
-        $conf = (new PortaConfig('host.dom'))
+        $conf = (new Config('host.dom'))
                 ->setOptions(
                 $this->prepareRequests([
                     new Response(200, [], '{"success": 1}'),
@@ -61,7 +61,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testEmpty() {
-        $conf = new PortaConfig('host.dom');
+        $conf = new Config('host.dom');
         $storage = new SessionPHPClassStorage();
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
@@ -71,7 +71,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testLogin() {
-        $conf = (new PortaConfig('host.dom'))
+        $conf = (new Config('host.dom'))
                 ->setOptions(
                 $this->prepareRequests([
                     new Response(200, [], json_encode(PortaToken::createLoginData(7600))),
@@ -91,7 +91,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $this->assertEquals(['params' => self::ACCOUNT], json_decode($request->getBody(), true));
 
         //Test exception by lock
-        $conf = new PortaConfig('host.dom');
+        $conf = new Config('host.dom');
         $storage = new SessionPHPClassStorage([], false);
         $s = new SessionManager($conf, $client, $storage);
         $this->expectException(\Porta\Billing\Exceptions\PortaException::class);
@@ -99,7 +99,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testAuthFailed() {
-        $conf = (new PortaConfig('host.dom'))
+        $conf = (new Config('host.dom'))
                 ->setOptions(
                 $this->prepareRequests([
                     new Response(500, [], '{"faultcode": "Server.Session.auth_failed",'
@@ -116,7 +116,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testLoginOtherFailed() {
-        $conf = (new PortaConfig('host.dom'))
+        $conf = (new Config('host.dom'))
                 ->setOptions(
                 $this->prepareRequests([
                     new Response(501),
@@ -131,7 +131,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testLogoutConnectException() {
-        $conf = (new PortaConfig('host.dom',))
+        $conf = (new Config('host.dom',))
                 ->setOptions(
                 $this->prepareRequests([
                     new \GuzzleHttp\Exception\ConnectException("Connect problems", new \GuzzleHttp\Psr7\Request('GET', '')),
@@ -147,7 +147,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testTokenRefreshByLock() {
-        $conf = new PortaConfig('host.dom');
+        $conf = new Config('host.dom');
         $storage = new SessionPHPClassStorage(PortaToken::createLoginData(100), false);
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
@@ -156,7 +156,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
 
     public function testTokenRefreshSuccess() {
         //Nothing happen if token expire time not within margin
-        $conf = (new PortaConfig('host.dom', null, [], 100));
+        $conf = (new Config('host.dom', null, [], 100));
         $storage = new SessionPHPClassStorage(PortaToken::createLoginData(101));
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
@@ -186,7 +186,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testTockenRefreshFailed() {
-        $conf = new PortaConfig('host.dom');
+        $conf = new Config('host.dom');
         $conf->setOptions(
                 $this->prepareRequests([
                     new Response(500),
@@ -201,7 +201,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testTockenRefreshFailedRelogin() {
-        $conf = new PortaConfig('host.dom', self::ACCOUNT);
+        $conf = new Config('host.dom', self::ACCOUNT);
         $conf->setOptions(
                 $this->prepareRequests([
                     new Response(500),
@@ -217,7 +217,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testTikenExpiredNoAccount() {
-        $conf = new PortaConfig('host.dom');
+        $conf = new Config('host.dom');
         $sessionData = new SessionData(PortaToken::createLoginData(-1));
         $storage = new SessionPHPClassStorage($sessionData->getData());
         $client = new SessionClient($conf);
@@ -229,7 +229,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testTikenExpiredNoAccountLoadOnWaitForLock() {
-        $conf = new PortaConfig('host.dom');
+        $conf = new Config('host.dom');
         $sessionData = new SessionData(PortaToken::createLoginData(7200));
         $storage = new SessionPHPClassStorage($sessionData->getData(), false);
         $client = new SessionClient($conf);
@@ -242,7 +242,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testChecksession() {
-        $conf = (new PortaConfig('host.dom'))->setOptions(
+        $conf = (new Config('host.dom'))->setOptions(
                 $this->prepareRequests([
                     new Response(200, [], '{"user_id": 0}'),
                     new Response(200, [], '{"user_id": 10}'),

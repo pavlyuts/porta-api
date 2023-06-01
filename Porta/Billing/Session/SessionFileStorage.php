@@ -8,12 +8,13 @@
 
 namespace Porta\Billing\Session;
 
+use Porta\Billing\Interfaces\SessionStorageInterface;
 use Porta\Billing\Exceptions\PortaException;
 
 /**
- * Use file as session data storage. Useful for server applications which use one 
+ * Use file as session data storage. Useful for server applications which use one
  * account to access the billing and share the session auth data.
- * 
+ *
  */
 class SessionFileStorage implements SessionStorageInterface {
 

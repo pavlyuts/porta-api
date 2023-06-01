@@ -6,14 +6,14 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace Porta\Billing;
+namespace Porta\Billing\Interfaces;
 
 /**
  * Interfaceto manage billing API cinfiguration
  *
  * @api
  */
-interface PortaConfigInterface {
+interface ConfigInterface {
 
     /**
      * Array key for login/username of account array

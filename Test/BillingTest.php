@@ -12,7 +12,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Porta\Billing\Billing;
-use Porta\Billing\PortaConfig as C;
+use Porta\Billing\Config as C;
 use Porta\Billing\Exceptions\PortaException;
 use Porta\Billing\Exceptions\PortaApiException;
 use Porta\Billing\Exceptions\PortaAuthException;

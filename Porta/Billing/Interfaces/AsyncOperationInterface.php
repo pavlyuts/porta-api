@@ -6,7 +6,7 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace Porta\Billing;
+namespace Porta\Billing\Interfaces;
 
 use Porta\Billing\Exceptions\PortaException;
 

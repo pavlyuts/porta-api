@@ -49,7 +49,7 @@ class Live extends \PHPUnit\Framework\TestCase {
             static::fail(self::NO_CONFIG_MESSAGE);
         }
         try {
-            self::$billing = new Billing(new \Porta\Billing\PortaConfig($testConfig['host'], $testConfig['account'], $testConfig['options']));
+            self::$billing = new Billing(new \Porta\Billing\Config($testConfig['host'], $testConfig['account'], $testConfig['options']));
         } catch (\Porta\Billing\Exceptions\PortaException $ex) {
             self::fail("Can't init billing class with provied config.\nError: {$ex->getMessage()}");
         }

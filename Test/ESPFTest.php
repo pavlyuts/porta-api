@@ -13,7 +13,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Porta\Billing\PortaConfig as C;
+use Porta\Billing\Config as C;
 use Porta\Billing\ESPF;
 use Porta\Billing\Exceptions\PortaESPFException;
 use PortaApiTest\Tools;

@@ -8,7 +8,7 @@
 
 namespace Porta\Billing\Exceptions;
 
-use Porta\Billing\PortaConfigInterface as C;
+use Porta\Billing\Interfaces\ConfigInterface as C;
 
 /**
  * Exception to throw on authentification errors
