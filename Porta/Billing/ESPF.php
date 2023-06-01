@@ -33,12 +33,12 @@ class ESPF extends Components\BillingBase {
     /**
      * GET request, params will be send as query string
      *
-     * @param string $endpoint - endpoint to call
-     * @param array $params - associative array of params, may omit
-     * @return associative array for returned JSON
+     * @param string $endpoint endpoint to call
+     * @param array $params associative array of params, may omit
+     * @return array associative array for returned JSON
      *
      * @throws PortaESPFException on ESPF api error, check error coode with API docs
-     *
+     * @api
      */
     public function get(string $endpoint, array $params = []): array {
         $response = $this->request('GET', $endpoint, ([] == $params) ? [] : [RO::QUERY => $params]);
@@ -48,12 +48,12 @@ class ESPF extends Components\BillingBase {
     /**
      * POST request, params will be sent as JSON body
      *
-     * @param string $endpoint - endpoint to call
-     * @param array $params - associative array of params, may omit
-     * @return associative array for returned JSON or empty array on empty
-     *         billing answer
+     * @param string $endpoint endpoint to call
+     * @param array $params associative array of params, may omit
+     * @return array associative array for returned JSON or empty array on empty billing answer
      *
      * @throws PortaESPFException on ESPF api error, check error coode with API docs
+     * @api
      */
     public function post(string $endpoint, array $params = []): array {
         $response = $this->request('POST', $endpoint, ([] == $params) ? [] : [RO::JSON => ([] == ($params ?? [])) ? new \stdClass() : $params]);
@@ -63,11 +63,12 @@ class ESPF extends Components\BillingBase {
     /**
      * PUT request, params mandatory and will be sent as JSON body
      *
-     * @param string $endpoint - endpoint to call
-     * @param array $params - associative array of params, mandatory
-     * @return associative array for returned JSON.
+     * @param string $endpoint endpoint to call
+     * @param array $params associative array of params, mandatory
+     * @return array associative array for returned JSON.
      *
      * @throws PortaESPFException on ESPF api error, check error coode with API docs
+     * @api
      */
     public function put(string $endpoint, array $params): array {
         $response = $this->request('PUT', $endpoint, [RO::JSON => ([] == ($params ?? [])) ? new \stdClass() : $params]);
@@ -77,10 +78,11 @@ class ESPF extends Components\BillingBase {
     /**
      * DELETE request, no params
      *
-     * @param string $endpoint - endpoint to call
+     * @param string $endpoint endpoint to call
      * @return void
      *
      * @throws PortaESPFException on ESPF api error, check error coode with API docs
+     * @api
      */
     public function delete(string $endpoint): void {
         $this->request('DELETE', $endpoint);

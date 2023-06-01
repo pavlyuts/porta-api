@@ -32,7 +32,7 @@ abstract class BillingBase {
     protected SessionManager $session;
 
     /**
-     * Setup biling wrapper, load (if any) saved session state and get class ready to use
+     * Setup the class, load (if any) saved session state and get it ready to use
      *
      * On construct:
      * - Loads saved session data from given SessinStorage object
@@ -41,8 +41,8 @@ abstract class BillingBase {
      * - If token expired or refresh failed - try to relogin if account data present, throwing exceptions on failures.
      * - If no accoount data present, just left the class un-logged-in, then you need login() to get it connected
      *
-     * @param ConfigInterface $config
-     * @param SessionStorageInterface|null $storage
+     * @param ConfigInterface $config Configuration object to run
+     * @param SessionStorageInterface|null $storage Session storage object to provide session persistance
      * @api
      * @package Internal
      */
