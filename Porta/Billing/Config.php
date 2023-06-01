@@ -85,14 +85,6 @@ class Config implements ConfigInterface {
      * @inherit
      * @api
      */
-    public function getEspfUrl(): string {
-        return static::SCHEME . '://' . $this->host . static::ESPF_BASE;
-    }
-
-    /**
-     * @inherit
-     * @api
-     */
     public function getOptions(): array {
         return $this->options;
     }

@@ -24,8 +24,7 @@ class PortaConfigTest extends \PHPUnit\Framework\TestCase {
 
     public function testConstructDefaulats() {
         $c = new Config(self::HOST);
-        $this->assertEquals('https://' . self::HOST . '/rest', $c->getApiUrl());
-        $this->assertEquals('https://' . self::HOST . '/espf/v1', $c->getEspfUrl());
+        $this->assertEquals('https://' . self::HOST, $c->getUrl());
         $this->assertFalse($c->hasAccount());
         $this->assertEquals([], $c->getOptions());
         $this->assertEquals(3600, $c->getSessionRefreshMargin());
@@ -33,8 +32,7 @@ class PortaConfigTest extends \PHPUnit\Framework\TestCase {
 
     public function testConstruct() {
         $c = new Config(self::HOST, self::ACCOUNT_PASS, self::OPTIONS, 7200);
-        $this->assertEquals('https://' . self::HOST . '/rest', $c->getApiUrl());
-        $this->assertEquals('https://' . self::HOST . '/espf/v1', $c->getEspfUrl());
+        $this->assertEquals('https://' . self::HOST, $c->getUrl());
         $this->assertTrue($c->hasAccount());
         $this->assertEquals(self::ACCOUNT_PASS, $c->getAccount());
         $this->assertEquals(self::OPTIONS, $c->getOptions());
