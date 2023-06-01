@@ -16,6 +16,8 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Wrapper for ESPF API
  *
+ * @api
+ * @package Billing
  */
 class ESPF extends Components\BillingBase {
 

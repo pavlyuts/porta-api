@@ -19,6 +19,8 @@ use Porta\Billing\Interfaces\SessionStorageInterface;
  * If you use session_write_close() to release the session, please do it AFTER
  * the billing ombject setup for it may login or refresh token safe way.
  *
+ * @api
+ * @package SessionStorage
  */
 class SessionPHPSessionStorage implements SessionStorageInterface {
 

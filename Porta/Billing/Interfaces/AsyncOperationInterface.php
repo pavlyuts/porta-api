@@ -17,6 +17,7 @@ use Porta\Billing\Exceptions\PortaException;
  * See AsyncOperaton implementation.
  *
  * @api
+ * @package Async
  */
 interface AsyncOperationInterface {
 

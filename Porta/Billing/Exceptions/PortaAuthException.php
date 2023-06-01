@@ -13,6 +13,8 @@ use Porta\Billing\Interfaces\ConfigInterface as C;
 /**
  * Exception to throw on authentification errors
  *
+ * @api
+ * @package Exceptions
  */
 class PortaAuthException extends PortaException {
 

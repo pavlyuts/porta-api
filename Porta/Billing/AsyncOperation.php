@@ -16,6 +16,7 @@ use Porta\Billing\Exceptions\PortaException;
  *
  * Out-of-the-box Implementation of AsyncOperationInterface.
  * @api
+ * @package Async
  */
 class AsyncOperation implements AsyncOperationInterface {
 

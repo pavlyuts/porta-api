@@ -9,9 +9,12 @@
 namespace Porta\Billing\Interfaces;
 
 /**
- * Interfaceto manage billing API cinfiguration
+ * Interface to manage billing server API cinfiguration
+ *
+ * Billing use this interface to know where to connect, store account, set HTTP(s) call options, e.t.c.
  *
  * @api
+ * @package Configuration
  */
 interface ConfigInterface {
 
@@ -54,20 +57,36 @@ interface ConfigInterface {
     public const ESPF_BASE = '/espf/v1';
 
     /**
-     * Provides full URI for service like 'https://host.dom/rest', for API service.
-     * no trailing slash.
+     * Provides base server URI for all services like 'https://host.dom', no trailing slash.
      *
      * @return string
      * @api
      */
     public function getUrl(): string;
 
+    /**
+     * Provides API base path, default is '/rest', no trailig shash
+     *
+     * @return string
+     * @api
+     */
     public function getAPIPath(): string;
 
+    /**
+     * Provides ESPF base path, default is '/espf/v1', no trailig shash
+     *
+     * @return string
+     * @api
+     */
     public function getEspfPath(): string;
 
     /**
-     * Returns true if accound record present in the config
+     * Returns true if accound record present in the config and correct.
+     *
+     * Billing casses rely on account data is checked for consistency in the ConfigInterface class.
+     * Consistency mean that a pair of login+password or login+token present.
+     *
+     * Billing class will not check it and send as is, generating API failure if the data is wrong.
      *
      * @return bool
      * @api
@@ -75,17 +94,19 @@ interface ConfigInterface {
     public function hasAccount(): bool;
 
     /**
-     * Provides account record or throw Exception if there no record inside
+     * Provides account record or throw PortaAuthException if there no record inside.
      *
-     * @return array
+     * @return array must have a pair of keys: `account`+`password` or `account`+`token`
+     * @throws PortaAuthException
      * @api
      */
     public function getAccount(): array;
 
     /**
-     * Sets account record. Exception if no required items given
+     * Sets account record. Exception if the record is inconsistent
      *
-     * @param array $account with fields keyed with sef::ACCOUNT_XXX consts
+     * @param array|null $account must have a pair of keys: 'account'+'password' or 'account'+'token'.
+     * null to clear account record out.
      * @return self for chaining
      * @throws PortaAuthException
      * @api
@@ -94,7 +115,7 @@ interface ConfigInterface {
 
     /**
      * Provides Gizzle http call options
-     * Be careful and consult Guzzle docs: https://docs.guzzlephp.org/en/stable/request-options.html
+     * Be careful and consult Guzzle docs: <https://docs.guzzlephp.org/en/stable/request-options.html>
      *
      * @return array to be passed to Guzzle
      * @api
@@ -102,8 +123,8 @@ interface ConfigInterface {
     public function getOptions(): array;
 
     /**
-     * Set/replace Guzzle http call options
-     * Be careful and consult Guzzle docs: https://docs.guzzlephp.org/en/stable/request-options.html
+     * Replace Guzzle http call options with a new set
+     * Be careful and consult Guzzle docs: <https://docs.guzzlephp.org/en/stable/request-options.html>
      *
      * @param array $options - new options set
      * @return self - for chaining
@@ -112,14 +133,14 @@ interface ConfigInterface {
     public function setOptions(array $options): self;
 
     /**
-     * Returns margin to token expire time to trigger token refresh procedure.
+     * Returns margin to token expire time triggering token refresh procedure.
      * Default token expire is +48h from issue time, default margin is 3600 (1h)
      * and a good for an app where you have more then one call in each hour.
      *
      * Please mind that billing also has inactivity timer, 24h by default,
      * which invalidates tocken even it is not yet expired.
      *
-     * @return int
+     * @return int seconds before token expire time to trigger refresh
      * @api
      */
     public function getSessionRefreshMargin(): int;

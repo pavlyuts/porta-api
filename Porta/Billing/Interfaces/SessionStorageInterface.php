@@ -11,6 +11,8 @@ namespace Porta\Billing\Interfaces;
 /**
  * Interface for session storage
  *
+ * @api
+ * @package SessionStorage
  */
 interface SessionStorageInterface {
 

@@ -14,6 +14,7 @@ namespace Porta\Billing\Exceptions;
  * Use it to catch all the exceptions thrown by the library
  *
  * @api
+ * @package Exceptions
  */
 class PortaException extends \Exception {
 

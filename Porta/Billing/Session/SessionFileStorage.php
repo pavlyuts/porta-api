@@ -15,6 +15,8 @@ use Porta\Billing\Exceptions\PortaException;
  * Use file as session data storage. Useful for server applications which use one
  * account to access the billing and share the session auth data.
  *
+ * @api
+ * @package SessionStorage
  */
 class SessionFileStorage implements SessionStorageInterface {
 

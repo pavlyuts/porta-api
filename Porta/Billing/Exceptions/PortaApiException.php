@@ -15,6 +15,8 @@ use Porta\Billing\Exceptions\PortaAuthException;
 /**
  * Exception to throw on specfied Portaone Billing API error
  *
+ * @api
+ * @package Exceptions
  */
 class PortaApiException extends PortaException {
 

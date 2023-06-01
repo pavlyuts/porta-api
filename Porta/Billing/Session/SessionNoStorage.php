@@ -16,6 +16,8 @@ use Porta\Billing\Interfaces\SessionStorageInterface;
  * Do nothing, store nothing, Billing class logins each time as instantiated.
  * Used by default if no storage class given.
  *
+ * @api
+ * @package SessionStorage
  */
 class SessionNoStorage implements SessionStorageInterface {
 

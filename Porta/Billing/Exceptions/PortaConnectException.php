@@ -15,6 +15,7 @@ namespace Porta\Billing\Exceptions;
  * the returned code/error is not a part of API/ESPF specification.
  *
  * @api
+ * @package Exceptions
  */
 class PortaConnectException extends PortaException {
 

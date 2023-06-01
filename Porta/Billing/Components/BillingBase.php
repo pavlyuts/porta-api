@@ -16,6 +16,7 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Base class implementing the shared functions of API and ESPF
  *
+ * @abstract
  * @api
  */
 abstract class BillingBase {
@@ -43,6 +44,7 @@ abstract class BillingBase {
      * @param ConfigInterface $config
      * @param SessionStorageInterface|null $storage
      * @api
+     * @package Internal
      */
     public function __construct(ConfigInterface $config, ?SessionStorageInterface $storage = null) {
         $this->config = $config;
@@ -147,10 +149,25 @@ abstract class BillingBase {
         return $result;
     }
 
+    /*
+     * Provides base path for the service on the server.
+     *
+     * @abstract
+     */
     abstract protected function getPathBase(): string;
 
+    /*
+     * Called to process errors with application-specific manner
+     *
+     * @abstract
+     */
     abstract protected function processPortaError(Response $response): void;
 
+    /**
+     * Answers if errored (non-200) response is and authentification error or not.
+     *
+     * @abstract
+     */
     abstract protected function isAuthError(Response $response): bool;
 
     /**

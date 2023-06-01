@@ -32,6 +32,7 @@ use Porta\Billing\Exceptions\PortaConnectException;
  *
  * See 'API documentation' section on https://docs.portaone.com
  * @api
+ * @package Billing
  */
 class Billing extends BillingBase {
 
@@ -82,7 +83,7 @@ class Billing extends BillingBase {
      * @param int $concurency how much calls to run in parallel. Default is 20. <i>WARNING: due of some reasons increasing of concurrency does not decrease overall time to complete all the requests. In fact, PHP does not support async operations, so all the magic comes from cURL multi-call.</i>
      *
      * @throws PortaAuthException
-     * $api
+     * @api
      */
     public function callAsync(iterable $operations, int $concurency = 20) {
         /** @var AsyncOperationInterface[] $operations */
