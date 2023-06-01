@@ -4,3 +4,4 @@
 /Test/temp/*
 !.gitkeep
 .phpunit.result.cache
+.phpdoc
