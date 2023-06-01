@@ -9,6 +9,7 @@
 namespace Porta\Billing;
 
 use Porta\Billing\Interfaces\ConfigInterface;
+use Porta\Billing\Interfaces\SessionStorageInterface;
 use Porta\Billing\Exceptions\PortaESPFException;
 use GuzzleHttp\RequestOptions as RO;
 use GuzzleHttp\Psr7\Response;
@@ -20,6 +21,14 @@ use GuzzleHttp\Psr7\Response;
  * @package Billing
  */
 class ESPF extends Components\BillingBase {
+
+    /**
+     * @inherit
+     * @api
+     */
+    public function __construct(ConfigInterface $config, ?SessionStorageInterface $storage = null) {
+        parent::__construct($config, $storage);
+    }
 
     /**
      * GET request, params will be send as query string
