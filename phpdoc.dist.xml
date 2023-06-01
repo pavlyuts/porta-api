@@ -7,7 +7,7 @@
 >
     <title>PortaBilling API</title>
     <paths>
-        <output>Docs</output>
+        <output>docs</output>
         <cache>Docs/.phpdoc/cache</cache>
     </paths>
     <version number="latest">
