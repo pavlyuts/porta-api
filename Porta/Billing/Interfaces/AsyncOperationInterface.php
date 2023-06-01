@@ -42,7 +42,7 @@ interface AsyncOperationInterface {
     /**
      * Will be called on success with response data array
      *
-     * @param array$response the dataset, returned by billing
+     * @param array $response the dataset, returned by billing
      * @api
      */
     public function processResponse(array $response): void;
