@@ -14,7 +14,7 @@ namespace PortaApiTest\Tools;
  */
 class FileLocker {
 
-    const LOG_FILE = __DIR__ . "/../Test/temp/FileLocker.log";
+    const LOG_DIR = __DIR__ . "/../Test/temp/";
     const CHILD = __DIR__ . '/file-locker-child.php';
 
     protected $fileName;
@@ -36,7 +36,7 @@ class FileLocker {
             if (is_resource($val)) {
                 fclose($val);
             } else {
-                
+
             }
         });
         if (file_exists($this->fileName)) {
@@ -46,14 +46,14 @@ class FileLocker {
 
     /**
      * Put a file on disk and keep it on for time (ms)
-     * 
+     *
      * @param int $time
      */
     public function lock(int $time) {
         $descriptorspec = array(
             0 => array("pipe", "r"),
             1 => array("pipe", "w"),
-            2 => array("file", self::LOG_FILE, "a")
+            2 => array("file", realpath(self::LOG_DIR) . '/FileLocker1.log', "a")
         );
         $pipeIndex = count($this->pipesets);
         $this->processes[] = proc_open(

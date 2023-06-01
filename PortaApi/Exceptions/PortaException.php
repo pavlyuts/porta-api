@@ -9,8 +9,12 @@
 namespace PortaApi\Exceptions;
 
 /**
- * Base class for billing exceptions
+ * Base exception class for all billing exceptions
+ *
+ * Use it to catch all the exceptions thrown by the library
+ *
+ * @api
  */
 class PortaException extends \Exception {
-    
+
 }

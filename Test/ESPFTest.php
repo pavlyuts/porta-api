@@ -13,7 +13,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PortaApi\Config as C;
+use PortaApi\PortaConfig as C;
 use PortaApi\ESPF;
 use PortaApi\Exceptions\PortaESPFException;
 use PortaApiTest\Tools;
@@ -25,13 +25,11 @@ use PortaApiTest\Tools\SessionPHPClassStorage;
  */
 class ESPFTest extends \PHPUnit\Framework\TestCase {
 
-    const CONFIG = [
-        C::HOST => 'testhost.dom',
-        C::ACCOUNT => [
-            C::LOGIN => 'testLogin',
-            C::PASSWORD => 'testPass',
-            C::TOKEN => 'testToken',
-        ],
+    const HOST = 'testhost.dom';
+    const ACCOUNT = [
+        C::LOGIN => 'testLogin',
+        C::PASSWORD => 'testPass',
+        C::TOKEN => 'testToken',
     ];
     const PARAMS = ['param1' => 'value1', 'param2' => 'value2'];
     const ANSWER = ['key1' => 'data1', 'key2' => 'data2',];
@@ -114,12 +112,12 @@ class ESPFTest extends \PHPUnit\Framework\TestCase {
 
     protected function prepare(array $responses) {
         $this->container = [];
-        $config = self::CONFIG;
         $mock = new MockHandler($responses);
         $handlerStack = HandlerStack::create($mock);
         $handlerStack->push(Middleware::history($this->container));
         $storage = new SessionPHPClassStorage(Tools\PortaToken::createLoginData(10000));
-        $config[C::OPTIONS]['handler'] = $handlerStack;
+        $config = (new C(self::HOST, self::ACCOUNT))
+                ->setOptions(['handler' => $handlerStack]);
         return new ESPF($config, $storage);
     }
 

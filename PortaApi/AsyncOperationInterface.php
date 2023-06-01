@@ -11,32 +11,46 @@ namespace PortaApi;
 use PortaApi\Exceptions\PortaException;
 
 /**
- * Interface for billing operation for bulc asyn call
+ * Interface for element of bulk async call to the billing. Represents one API call task.
+ *
+ * Used by Billing->callAsync() as array element.
+ * See AsyncOperaton implementation.
+ *
+ * @api
  */
 interface AsyncOperationInterface {
 
     /**
-     * Return request to billing in a form of array of two elements:
-     * [0] string, Billing API endpoint to call
-     * [1] array, params to use with biilling call
-     * 
-     * must retirn null to bypass billing call for this element
-     * 
-     * @return array|null
+     * Should return Billing API endpoint to call
+     *
+     * May retirn null to bypass billing call for this element if required
+     *
+     * @return string|null
+     * @api
      */
-    public function getCall(): ?array;
+    public function getCallEndpoint(): ?string;
 
     /**
-     * Here the response from billing will put on success call
-     * 
-     * @param array $response
+     * Should return Billing API call params, which will be placed to { "params": /HERE/ } of API call.
+     *
+     * @return array
+     * @api
      */
-    public function processResponse(array $response);
+    public function getCallParams(): array;
 
     /**
-     * If any exception happens with call of this instance, exception will put here
-     * 
-     * @param PortaException $ex
+     * Will be called on success with response data array
+     *
+     * @param array$response the dataset, returned by billing
+     * @api
      */
-    public function processException(PortaException $ex);
+    public function processResponse(array $response): void;
+
+    /**
+     * Will be called on call failure with exception happened
+     *
+     * @param PortaException $ex exception, thrown while complete the call
+     * @api
+     */
+    public function processException(PortaException $ex): void;
 }

@@ -9,9 +9,9 @@
 namespace PortaApi\Exceptions;
 
 /**
- * Exceptions to handle ESPF errors
+ * Exceptions to throw on specified ESPF errors
  *
  */
 class PortaESPFException extends PortaException {
-    
+
 }

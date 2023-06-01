@@ -9,7 +9,7 @@
 namespace PortaApiTest\Tools;
 
 use Firebase\JWT\JWT;
-use PortaApi\Session\Session;
+use PortaApi\Components\BillingBase;
 
 /**
  * Test tool to crate and manage JWT tokens
@@ -82,20 +82,20 @@ EOT;
 
     /**
      * Creates billing-like session record on login
-     * 
+     *
      * @param int $expireShift - time before expired, negative to put in the past
      */
     public static function createLoginData(int $expireShift = 0) {
         $t = (new \DateTime('now', new \DateTimeZone('UTC')))->setTimestamp(time() + $expireShift);
         $session = self::SESSION_TEMPLATE;
-        $session['expires_at'] = Session::timeToBilling($t);
+        $session['expires_at'] = BillingBase::timeToBilling($t);
         $session['access_token'] = self::createJWT($t);
         return $session;
     }
 
     /**
      * Creates billing-like session data on token refresh
-     * 
+     *
      * @param int $expireShift - time before expired, negative to put in the past
      */
     public static function createRefreshData(int $expireShift = 0) {

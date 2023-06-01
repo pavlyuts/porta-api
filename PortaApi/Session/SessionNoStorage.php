@@ -9,13 +9,16 @@
 namespace PortaApi\Session;
 
 /**
- * Dumb storage to use when no storage given
+ * Dummy storage to use when no storage given.
+ *
+ * Do nothing, store nothing, Billing class logins each time as instantiated.
+ * Used by default if no storage class given.
  *
  */
 class SessionNoStorage implements SessionStorageInterface {
 
     public function clean() {
-        
+
     }
 
     public function load(): ?array {
@@ -27,7 +30,7 @@ class SessionNoStorage implements SessionStorageInterface {
     }
 
     public function save(array $session) {
-        
+
     }
 
 }

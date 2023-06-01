@@ -9,9 +9,13 @@
 namespace PortaApi\Exceptions;
 
 /**
- * Exception to handle all HTTP connecton errors
+ * Exception to throw on network and HTTP protcol errors
  *
+ * As API/ESPF also used non-200 code to rport errors, this exception only thrown when
+ * the returned code/error is not a part of API/ESPF specification.
+ *
+ * @api
  */
 class PortaConnectException extends PortaException {
-    
+
 }

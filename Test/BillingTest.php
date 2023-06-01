@@ -12,7 +12,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PortaApi\Billing;
-use PortaApi\Config as C;
+use PortaApi\PortaConfig as C;
 use PortaApi\Exceptions\PortaException;
 use PortaApi\Exceptions\PortaApiException;
 use PortaApi\Exceptions\PortaAuthException;
@@ -23,34 +23,32 @@ use PortaApi\AsyncOperation;
  * Tests for billing class
  *
  */
-class BillingTest extends \PHPUnit\Framework\TestCase {
+class BillingTest extends Tools\RequestTestCase {
 
-    const CONFIG = [
-        C::HOST => 'testhost.dom',
-        C::ACCOUNT => [
-            C::LOGIN => 'testUser',
-            C::PASSWORD => 'testPass',
-        ],
+    const HOST = 'testhost.dom';
+    const ACCOUNT = [
+        C::LOGIN => 'testUser',
+        C::PASSWORD => 'testPass',
     ];
 
     public function testCall() {
         $sessionData = PortaToken::createLoginData(7200);
         $testJsonData = ['testKey' => 'testValue'];
-        $mock = new MockHandler([
-            new Response(200, [], json_encode($sessionData)),
-            new Response(200, ['content-type' => 'application/json; charset=UTF-8'], json_encode($testJsonData)),
-            new Response(200,
-                    ['content-type' => 'application/pdf', 'content-disposition' => 'attachment; filename="testfile.pdf"'],
-                    'TestFileBody'),
-            new Response(200,
-                    ['content-type' => 'application/csv', 'content-disposition' => 'attachment; filename="testfile.csv"'],
-                    'TestFileBody'),
-            new Response(404, [], ''),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(200, [], json_encode($sessionData)),
+                    new Response(200, ['content-type' => 'application/json; charset=UTF-8'], json_encode($testJsonData)),
+                    new Response(200,
+                            ['content-type' => 'application/pdf', 'content-disposition' => 'attachment; filename="testfile.pdf"'],
+                            'TestFileBody'),
+                    new Response(200,
+                            ['content-type' => 'application/csv', 'content-disposition' => 'attachment; filename="testfile.csv"'],
+                            'TestFileBody'),
+                    new Response(404, [], ''),
+        ]));
         $storage = new Tools\SessionPHPClassStorage();
-        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+
+        $b = new Billing($conf, $storage);
         $this->assertTrue($b->isSessionUp());
         $this->assertEquals($sessionData, $storage->load());
 
@@ -59,58 +57,83 @@ class BillingTest extends \PHPUnit\Framework\TestCase {
 
         $r = $b->call('/NoMatter', $testJsonData);
         $this->assertEquals('testfile.pdf', $r['filename']);
+        $this->assertEquals('application/pdf', $r['mime']);
         $this->assertEquals('TestFileBody', (string) $r['stream']);
 
         $r = $b->call('/NoMatter', $testJsonData);
         $this->assertEquals('testfile.csv', $r['filename']);
+        $this->assertEquals('application/csv', $r['mime']);
         $this->assertEquals('TestFileBody', (string) $r['stream']);
 
         $this->expectException(PortaException::class);
         $r = $b->call('/NoMatter', $testJsonData);
     }
 
-    public function testDetectContentFail() {
-        $mock = new MockHandler([
-            new Response(200, ['content-type' => 'application/xls']),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-
+    public function testAutoReloginAndBrokenJson() {
+        $sessionData = PortaToken::createLoginData(7200);
+        $testJsonData = ['testKey' => 'testValue'];
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(500, [], json_encode(['faultcode' => 'Server.Session.check_auth.auth_failed'])),
+                    new Response(200, [], json_encode(PortaToken::createLoginData(7200))),
+                    new Response(200, ['content-type' => 'application/json; charset=UTF-8'], json_encode($testJsonData)),
+                    new Response(200, ['content-type' => 'application/json; charset=UTF-8'], 'NotJson'),
+        ]));
         $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
-        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+
+        $b = new Billing($conf, $storage);
+
+        $this->assertEquals($testJsonData, $b->call('/NoMatter'));
+        $request = $this->getRequst(1);
+        $this->assertEquals('https://testhost.dom/rest/Session/login', (string) $request->getUri());
+        $this->assertEquals(['params' => self::ACCOUNT], json_decode($request->getBody(), true));
+
+        $this->expectException(PortaException::class);
+        $b->call('/NoMatter');
+    }
+
+    public function testDetectContentFail() {
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(200, ['content-type' => 'application/xls']),
+        ]));
+        $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
+
+        $b = new Billing($conf, $storage);
         $this->expectException(PortaException::class);
         $r = $b->call('/NoMatter');
     }
 
     public function testExtractFileFail() {
-        $mock = new MockHandler([
-            new Response(200,
-                    ['content-type' => 'application/pdf', 'content-disposition' => 'attachment'],
-                    'TestFileBody'),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(200,
+                            ['content-type' => 'application/pdf', 'content-disposition' => 'attachment'],
+                            'TestFileBody'),
+        ]));
         $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
-        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+
+        $b = new Billing($conf, $storage);
         $this->expectException(PortaException::class);
         $r = $b->call('/NoMatter');
     }
 
     public function testAPIException() {
-        $mock = new MockHandler([
-            new Response(500,
-                    ['content-type' => 'application/json'],
-                    '{"faultcode": "WrongRequest", "faultstring": "WrongRequestMessage"}'),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
-
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(500,
+                            ['content-type' => 'application/json'],
+                            '{"faultcode": "WrongRequest", "faultstring": "WrongRequestMessage"}'),
+        ]));
         $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
-        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+
+        $b = new Billing($conf, $storage);
         $this->expectException(PortaApiException::class);
         $r = $b->call('/NoMatter');
     }
 
     /**
-     * @covers \PortaApi\Billing::callAsync
+     * covers \PortaApi\Billing::callAsync
      */
     public function testAsyncCall() {
         $list = [
@@ -122,22 +145,25 @@ class BillingTest extends \PHPUnit\Framework\TestCase {
             'key5' => new AsyncOperation('/test5', ['paramKey5' => 'paramValue5']),
             'key6' => new AsyncOperation('/test6', []),
             'key7' => new AsyncOperation('/test7', ['paramKey7' => 'paramValue7']),
+            'key8' => new AsyncOperation('/test8', ['paramKey8' => 'paramValue8']),
         ];
-        $mock = new MockHandler([
-            new Response(200, ['content-type' => 'application/json'], '{"user_id":1}'),
-            new Response(200, ['content-type' => 'application/json'], '{}'),
-            new Response(200, ['content-type' => 'application/json'], '{"answerKey2":"answerData2"}'),
-            new Response(200, ['content-type' => 'application/json'], '{"answerKey3":"answerData3"}'),
-            new Response(200, ['content-type' => 'application/json'], '{"answerKey4":"answerData4"}'),
-            new Response(500,
-                    ['content-type' => 'application/json'],
-                    '{"faultcode": "WrongRequest", "faultstring": "WrongRequestMessage"}'),
-            new \GuzzleHttp\Exception\ConnectException("Connection fail", new \GuzzleHttp\Psr7\Request('GET', '/test')),
-            new Response(200, ['content-type' => 'application/json'], '{"answerKey7":"answerData7"}'),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(200, ['content-type' => 'application/json'], '{"user_id":1}'),
+                    new Response(200, ['content-type' => 'application/json'], '{}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"answerKey2":"answerData2"}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"answerKey3":"answerData3"}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"answerKey4":"answerData4"}'),
+                    new Response(500,
+                            ['content-type' => 'application/json'],
+                            '{"faultcode": "WrongRequest", "faultstring": "WrongRequestMessage"}'),
+                    new \GuzzleHttp\Exception\ConnectException("Connection fail", new \GuzzleHttp\Psr7\Request('GET', '/test')),
+                    new Response(200, ['content-type' => 'application/json'], '{"answerKey7":"answerData7"}'),
+                    new Response(200, [], '{"answerKey8":"answerData8"}'),
+        ]));
         $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
-        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+
+        $b = new Billing($conf, $storage);
 
         $this->assertFalse($list['key1']->executed());
 
@@ -166,30 +192,46 @@ class BillingTest extends \PHPUnit\Framework\TestCase {
 
         $this->assertTrue($list['key7']->success());
         $this->assertEquals(['answerKey7' => 'answerData7'], $list['key7']->getResponse());
+
+        $this->assertFalse($list['key8']->success());
+        $this->assertInstanceOf(\PortaApi\Exceptions\PortaException::class, $list['key8']->getException());
     }
 
     public function testWrongAsyncClassTypeException() {
-        $b = new Billing([C::HOST => 'host']);
+        $b = new Billing(new C('host'));
         $this->expectException(PortaException::class);
         $b->callAsync([[], new \stdClass]);
     }
 
     public function testAsyncNoSessionException() {
-        $b = new Billing([C::HOST => 'host']);
+        $b = new Billing(new C('host'));
         $this->expectException(PortaAuthException::class);
         $b->callAsync([new AsyncOperation('/test')]);
     }
 
     public function testCallList() {
-        $mock = new MockHandler([
-            new Response(200, ['content-type' => 'application/json'], '{"something_list": {"key1":"value1", "key2":"value2"}}'),
-            new Response(200, ['content-type' => 'application/json'], '{"key3":"value3", "key4":"value4"}'),
-        ]);
-        $handlerStack = HandlerStack::create($mock);
+        $conf = (new C(self::HOST, self::ACCOUNT))->setOptions(
+                $this->prepareRequests([
+                    new Response(200, ['content-type' => 'application/json'], '{"something_list": {"key1":"value1", "key2":"value2"}}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"key3":"value3", "key4":"value4"}'),
+        ]));
         $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
-        $b = new Billing(array_merge(self::CONFIG, [C::OPTIONS => ['handler' => $handlerStack]]), $storage);
+
+        $b = new Billing($conf, $storage);
+
         $this->assertEquals(['key1' => 'value1', 'key2' => 'value2'], $b->callList('/nomatter'));
         $this->assertEquals(['key3' => 'value3', 'key4' => 'value4'], $b->callList('/nomatter'));
+    }
+
+    const ZONE = 'Pacific/Palau';
+    const DATETIME = '2023-03-20 07:38:17';
+    const DATE = '2023-03-20';
+    const LOCAL_DATETIME = '2023-03-20 16:38:17';
+
+    public function testDateTimeConvert() {
+        $local = new \DateTime(self::LOCAL_DATETIME, new \DateTimeZone(self::ZONE));
+        $this->assertEquals($local, Billing::timeToLocal(self::DATETIME));
+        $this->assertEquals(self::DATETIME, Billing::timeToBilling($local));
     }
 
 }

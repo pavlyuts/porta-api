@@ -18,7 +18,7 @@ class AsyncOperationNull extends \PortaApi\AsyncOperation {
         parent::__construct('');
     }
 
-    public function getCall(): ?array {
+    public function getCallEndpoint(): ?string {
         return null;
     }
 

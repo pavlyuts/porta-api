@@ -21,7 +21,8 @@ class AsyncOperationTest extends \PHPUnit\Framework\TestCase {
         $ao = new AsyncOperation('/test', ['paramsKey' => 'paramsValue']);
         $this->assertFalse($ao->executed());
         $this->assertFalse($ao->success());
-        $this->assertEquals(['/test', ['paramsKey' => 'paramsValue']], $ao->getCall());
+        $this->assertEquals('/test', $ao->getCallEndpoint());
+        $this->assertEquals(['paramsKey' => 'paramsValue'], $ao->getCallParams());
         $ao->processResponse(['responseKey' => 'responseValue']);
         $this->assertTrue($ao->executed());
         $this->assertTrue($ao->success());
@@ -36,7 +37,7 @@ class AsyncOperationTest extends \PHPUnit\Framework\TestCase {
 
     public function testAsyncOperationNull() {
         $ao = new AsyncOperationNull();
-        $this->assertNull($ao->getCall());
+        $this->assertNull($ao->getCallEndpoint());
     }
 
 }

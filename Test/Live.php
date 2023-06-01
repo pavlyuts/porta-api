@@ -9,7 +9,6 @@
 namespace PortaApiTest;
 
 use PortaApi\Billing;
-use PortaApi\Config as C;
 use GuzzleHttp\RequestOptions as RO;
 
 /**
@@ -46,18 +45,18 @@ class Live extends \PHPUnit\Framework\TestCase {
             static::fail(self::NO_CONFIG_MESSAGE);
         }
         require self::CONFIG_FILE;
-        if ($testConfig[C::HOST] == 'billing-sip-host.dom' || $testConfig[C::ACCOUNT][C::LOGIN] == 'userName') {
+        if ($testConfig['host'] == 'billing-sip-host.dom' || $testConfig['account']['login'] == 'userName') {
             static::fail(self::NO_CONFIG_MESSAGE);
         }
         try {
-            self::$billing = new Billing($testConfig);
+            self::$billing = new Billing(new \PortaApi\PortaConfig($testConfig['host'], $testConfig['account'], $testConfig['options']));
         } catch (\PortaApi\Exceptions\PortaException $ex) {
             self::fail("Can't init billing class with provied config.\nError: {$ex->getMessage()}");
         }
     }
 
     public function testGetCustomers() {
-        $result = self::$billing->call('/Customer/get_customer_list', ['limit' => 50]);
+        $result = self::$billing->call('Customer/get_customer_list', ['limit' => 50]);
         $this->assertArrayHasKey('customer_list', $result);
         return $result['customer_list'];
     }
@@ -68,19 +67,20 @@ class Live extends \PHPUnit\Framework\TestCase {
     public function testGetCustomerInfo($customerList) {
         $list = [];
         foreach ($customerList as $customer) {
-            $list[] = new \PortaApi\AsyncOperation('/Customer/get_customer_info', ['i_customer' => $customer['i_customer']]);
+            $list[] = new \PortaApi\AsyncOperation('Customer/get_customer_info', ['i_customer' => $customer['i_customer']]);
         }
         self::$billing->callAsync($list);
         foreach ($list as $item) {
+            if (!$item->success()) {
+                throw $item->getException();
+            }
             $this->assertTrue($item->success());
             $this->assertArrayHasKey('customer_info', $item->getResponse());
         }
     }
 
     public function testGetCountries() {
-        $result = self::$billing->call('/Generic/get_countries_list', []);
-        $this->assertArrayHasKey('countries_list', $result);
-        $result = self::$billing->call('/Generic/get_countries_list');
+        $result = self::$billing->call('Generic/get_countries_list', []);
         $this->assertArrayHasKey('countries_list', $result);
     }
 

@@ -8,10 +8,10 @@
 
 namespace PortaApi\Exceptions;
 
-use PortaApi\Config as C;
+use PortaApi\PortaConfigInterface as C;
 
 /**
- * Exception to handle authentification errors
+ * Exception to throw on authentification errors
  *
  */
 class PortaAuthException extends PortaException {

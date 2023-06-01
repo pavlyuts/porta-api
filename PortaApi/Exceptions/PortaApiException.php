@@ -13,7 +13,7 @@ use PortaApi\Exceptions\PortaException;
 use PortaApi\Exceptions\PortaAuthException;
 
 /**
- * handling of Portaone Billing API error
+ * Exception to throw on specfied Portaone Billing API error
  *
  */
 class PortaApiException extends PortaException {
