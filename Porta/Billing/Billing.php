@@ -6,18 +6,18 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi;
+namespace Porta\Billing;
 
-use PortaApi\Components\BillingBase;
-use PortaApi\Components\SessionClient;
+use Porta\Billing\Components\BillingBase;
+use Porta\Billing\Components\SessionClient;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Header;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use PortaApi\Exceptions\PortaException;
-use PortaApi\Exceptions\PortaApiException;
-use PortaApi\Exceptions\PortaAuthException;
-use PortaApi\Exceptions\PortaConnectException;
+use Porta\Billing\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaApiException;
+use Porta\Billing\Exceptions\PortaAuthException;
+use Porta\Billing\Exceptions\PortaConnectException;
 
 /**
  * Billing API wrapper

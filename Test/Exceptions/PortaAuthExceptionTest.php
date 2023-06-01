@@ -8,7 +8,7 @@
 
 namespace PortaApiTest\Exceptions;
 
-use PortaApi\Exceptions\PortaAuthException;
+use Porta\Billing\Exceptions\PortaAuthException;
 
 /**
  * Exceptions tests

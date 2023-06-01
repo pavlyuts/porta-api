@@ -11,13 +11,13 @@ namespace PortaApiTest;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PortaApi\Billing;
-use PortaApi\PortaConfig as C;
-use PortaApi\Exceptions\PortaException;
-use PortaApi\Exceptions\PortaApiException;
-use PortaApi\Exceptions\PortaAuthException;
+use Porta\Billing\Billing;
+use Porta\Billing\PortaConfig as C;
+use Porta\Billing\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaApiException;
+use Porta\Billing\Exceptions\PortaAuthException;
 use PortaApiTest\Tools\PortaToken;
-use PortaApi\AsyncOperation;
+use Porta\Billing\AsyncOperation;
 
 /**
  * Tests for billing class
@@ -133,7 +133,7 @@ class BillingTest extends Tools\RequestTestCase {
     }
 
     /**
-     * covers \PortaApi\Billing::callAsync
+     * covers \Porta\Billing\Billing::callAsync
      */
     public function testAsyncCall() {
         $list = [
@@ -188,13 +188,13 @@ class BillingTest extends Tools\RequestTestCase {
         $this->assertInstanceOf(PortaApiException::class, $list['key5']->getException());
 
         $this->assertFalse($list['key6']->success());
-        $this->assertInstanceOf(\PortaApi\Exceptions\PortaConnectException::class, $list['key6']->getException());
+        $this->assertInstanceOf(\Porta\Billing\Exceptions\PortaConnectException::class, $list['key6']->getException());
 
         $this->assertTrue($list['key7']->success());
         $this->assertEquals(['answerKey7' => 'answerData7'], $list['key7']->getResponse());
 
         $this->assertFalse($list['key8']->success());
-        $this->assertInstanceOf(\PortaApi\Exceptions\PortaException::class, $list['key8']->getException());
+        $this->assertInstanceOf(\Porta\Billing\Exceptions\PortaException::class, $list['key8']->getException());
     }
 
     public function testWrongAsyncClassTypeException() {

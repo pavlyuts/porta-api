@@ -6,7 +6,7 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Components;
+namespace Porta\Billing\Components;
 
 /**
  * Class to manage Portaone JWT token

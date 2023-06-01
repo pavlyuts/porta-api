@@ -6,11 +6,11 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Components;
+namespace Porta\Billing\Components;
 
-use PortaApi\PortaConfigInterface;
-use PortaApi\Session\SessionStorageInterface;
-use PortaApi\Exceptions\PortaException;
+use Porta\Billing\PortaConfigInterface;
+use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Exceptions\PortaException;
 use GuzzleHttp\Psr7\Response;
 
 /**
@@ -56,8 +56,8 @@ abstract class BillingBase {
      * The session data will be stored if session storage class is supplied
      *
      * @param array $account The same structure as used in PortaConfig, associative array for 'login'+'password' or 'login'+'token' keys
-     * @throws \PortaApi\Exceptions\PortaConnectException
-     * @throws \PortaApi\Exceptions\PortaAuthException
+     * @throws \Porta\Billing\Exceptions\PortaConnectException
+     * @throws \Porta\Billing\Exceptions\PortaAuthException
      * @api
      */
     public function login(array $account): void {
@@ -69,7 +69,7 @@ abstract class BillingBase {
      *
      * Will call '/Session/logout' api method. Due of some problems with Portaone resposes, session will considered closed whatever server respond. No server error will be respected, but conenction errors will thrown.
      *
-     * @throws \PortaApi\Exceptions\PortaConnectException
+     * @throws \Porta\Billing\Exceptions\PortaConnectException
      * @api
      */
     public function logout(): void {

@@ -13,9 +13,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PortaApi\PortaConfig as C;
-use PortaApi\ESPF;
-use PortaApi\Exceptions\PortaESPFException;
+use Porta\Billing\PortaConfig as C;
+use Porta\Billing\ESPF;
+use Porta\Billing\Exceptions\PortaESPFException;
 use PortaApiTest\Tools;
 use PortaApiTest\Tools\SessionPHPClassStorage;
 

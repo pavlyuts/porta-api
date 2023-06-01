@@ -6,9 +6,9 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Exceptions;
+namespace Porta\Billing\Exceptions;
 
-use PortaApi\PortaConfigInterface as C;
+use Porta\Billing\PortaConfigInterface as C;
 
 /**
  * Exception to throw on authentification errors

@@ -7,11 +7,11 @@ API docs: https://docs.portaone.com
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <coverage processUncoveredFiles="true">
     <include>
-      <directory suffix=".php">../PortaApi/</directory>
+      <directory suffix=".php">../Porta\Billing/</directory>
       <directory suffix=".php">../Tools/</directory>
     </include>
     <exclude>
-      <file>../PortaApi/Session/SessionPHPSessionStorage.php</file>
+      <file>../Porta\Billing/Session/SessionPHPSessionStorage.php</file>
       <file>../Tools/file-locker-child.php</file>
     </exclude>
   </coverage>

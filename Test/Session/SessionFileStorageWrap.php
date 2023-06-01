@@ -12,7 +12,7 @@ namespace PortaApiTest\Session;
  * Test wrapper for SessionFileStorage
  *
  */
-class SessionFileStorageWrap extends \PortaApi\Session\SessionFileStorage {
+class SessionFileStorageWrap extends \Porta\Billing\Session\SessionFileStorage {
 
     public function changeFilename($fileName) {
         $this->fileName = $fileName;

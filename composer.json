@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PortaApi\\": "PortaApi"
+            "Porta\\Billing\\": "Porta/Billing"
         }
     },
     "require-dev": {

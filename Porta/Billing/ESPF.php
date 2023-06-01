@@ -6,10 +6,10 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi;
+namespace Porta\Billing;
 
-use PortaApi\Session\SessionStorageInterface;
-use PortaApi\Exceptions\PortaESPFException;
+use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Exceptions\PortaESPFException;
 use GuzzleHttp\RequestOptions as RO;
 use GuzzleHttp\Psr7\Response;
 

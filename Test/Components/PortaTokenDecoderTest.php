@@ -8,7 +8,7 @@
 
 namespace PortaApiTest\Components;
 
-use PortaApi\Components\PortaTokenDecoder;
+use Porta\Billing\Components\PortaTokenDecoder;
 
 /**
  * Test for PortaToken

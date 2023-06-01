@@ -8,11 +8,11 @@
 
 namespace PortaApiTest\Components;
 
-use PortaApi\PortaConfig;
-use PortaApi\Components\SessionClient;
-use PortaApi\Components\SessionManager;
-use PortaApi\Components\SessionData;
-use PortaApi\Session\SessionStorageInterface;
+use Porta\Billing\PortaConfig;
+use Porta\Billing\Components\SessionClient;
+use Porta\Billing\Components\SessionManager;
+use Porta\Billing\Components\SessionData;
+use Porta\Billing\Session\SessionStorageInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
@@ -94,7 +94,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $conf = new PortaConfig('host.dom');
         $storage = new SessionPHPClassStorage([], false);
         $s = new SessionManager($conf, $client, $storage);
-        $this->expectException(\PortaApi\Exceptions\PortaException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaException::class);
         $s->login(self::ACCOUNT);
     }
 
@@ -111,7 +111,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage();
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->expectException(\PortaApi\Exceptions\PortaAuthException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaAuthException::class);
         $s->login(self::ACCOUNT);
     }
 
@@ -126,7 +126,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage();
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->expectException(\PortaApi\Exceptions\PortaException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaException::class);
         $s->login(self::ACCOUNT);
     }
 
@@ -142,7 +142,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage($sessionData->getData());
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->expectException(\PortaApi\Exceptions\PortaConnectException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaConnectException::class);
         $s->logout();
     }
 
@@ -224,7 +224,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $s = new SessionManager($conf, $client, $storage);
         $this->assertFalse($s->isSessionUp());
         // Relogin with no account throws exception
-        $this->expectException(\PortaApi\Exceptions\PortaAuthException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaAuthException::class);
         $s->relogin();
     }
 
@@ -257,7 +257,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $this->assertFalse($s->checkSession());
         $this->assertTrue($s->checkSession());
         $this->assertFalse($s->checkSession());
-        $this->expectException(\PortaApi\Exceptions\PortaApiException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaApiException::class);
         $s->checkSession();
     }
 

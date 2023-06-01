@@ -6,11 +6,11 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Components;
+namespace Porta\Billing\Components;
 
-use PortaApi\PortaConfigInterface;
-use PortaApi\Components\SessionManager;
-use PortaApi\Session\SessionStorageInterface;
+use Porta\Billing\PortaConfigInterface;
+use Porta\Billing\Components\SessionManager;
+use Porta\Billing\Session\SessionStorageInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
@@ -51,7 +51,7 @@ class SessionClient extends \GuzzleHttp\Client {
         try {
             return parent::request($method, $uri, $options);
         } catch (\GuzzleHttp\Exception\ConnectException $ex) {
-            throw new \PortaApi\Exceptions\PortaConnectException($ex->getMessage(), $ex->getCode());
+            throw new \Porta\Billing\Exceptions\PortaConnectException($ex->getMessage(), $ex->getCode());
         }
     }
 
@@ -73,7 +73,7 @@ class SessionClient extends \GuzzleHttp\Client {
         }
         $result = json_decode($response->getBody(), true);
         if (is_null($result)) {
-            throw new \PortaApi\Exceptions\PortaException("Can't decode returned JSON");
+            throw new \Porta\Billing\Exceptions\PortaException("Can't decode returned JSON");
         }
         return $result;
     }

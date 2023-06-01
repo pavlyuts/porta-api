@@ -8,9 +8,9 @@
 
 namespace PortaApiTest\Exceptions;
 
-use PortaApi\Exceptions\PortaException;
-use PortaApi\Exceptions\PortaApiException;
-use PortaApi\Exceptions\PortaAuthException;
+use Porta\Billing\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaApiException;
+use Porta\Billing\Exceptions\PortaAuthException;
 use GuzzleHttp\Psr7\Response;
 
 /**
@@ -25,7 +25,7 @@ class PortaApiExceptionTest extends \PHPUnit\Framework\TestCase {
         } catch (PortaApiException $ex) {
             $this->assertEquals('777', $ex->getPortaCode());
             $this->assertEquals('Test Message', $ex->getMessage());
-            $this->assertStringContainsString("PortaApi\Exceptions\PortaApiException: Test Message, error code '777' in", (string) $ex);
+            $this->assertStringContainsString("Porta\Billing\Exceptions\PortaApiException: Test Message, error code '777' in", (string) $ex);
         }
     }
 

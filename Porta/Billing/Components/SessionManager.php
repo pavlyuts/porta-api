@@ -6,15 +6,15 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Components;
+namespace Porta\Billing\Components;
 
-use PortaApi\PortaConfigInterface;
-use PortaApi\Components\SessionClient;
-use PortaApi\Session\SessionStorageInterface;
-use PortaApi\Session\SessionNoStorage;
-use PortaApi\Exceptions\PortaException;
-use PortaApi\Exceptions\PortaApiException;
-use PortaApi\Exceptions\PortaAuthException;
+use Porta\Billing\PortaConfigInterface;
+use Porta\Billing\Components\SessionClient;
+use Porta\Billing\Session\SessionStorageInterface;
+use Porta\Billing\Session\SessionNoStorage;
+use Porta\Billing\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaApiException;
+use Porta\Billing\Exceptions\PortaAuthException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions as RO;
 
@@ -94,7 +94,7 @@ class SessionManager {
             $this->client->request('POST', $this->config->getAPIPath() . '/Session/logout',
                     [RO::JSON => [SessionClient::PARAMS => [SessionData::ACCESS_TOKEN => $this->sessionData->getAccessToken()]]]);
         } catch (PortaException $ex) {
-            if ($ex instanceof \PortaApi\Exceptions\PortaConnectException) {
+            if ($ex instanceof \Porta\Billing\Exceptions\PortaConnectException) {
                 throw $ex;
             }
         }

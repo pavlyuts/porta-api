@@ -8,8 +8,8 @@
 
 namespace PortaApiTest\Session;
 
-use PortaApi\Session\SessionFileStorage;
-use PortaApi\Exceptions\PortaException;
+use Porta\Billing\Session\SessionFileStorage;
+use Porta\Billing\Exceptions\PortaException;
 use PortaApiTest\Tools\FileLocker;
 
 /**

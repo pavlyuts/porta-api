@@ -6,9 +6,9 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi;
+namespace Porta\Billing;
 
-use PortaApi\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaException;
 
 /**
  * Interface for element of bulk async call to the billing. Represents one API call task.

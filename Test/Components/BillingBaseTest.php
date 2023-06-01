@@ -8,8 +8,8 @@
 
 namespace PortaApiTest\Components;
 
-use PortaApi\Components\BillingBase;
-use PortaApi\PortaConfig;
+use Porta\Billing\Components\BillingBase;
+use Porta\Billing\PortaConfig;
 use PortaApiTest\Tools\SessionPHPClassStorage;
 use PortaApiTest\Tools\PortaToken;
 use GuzzleHttp\Psr7\Response;

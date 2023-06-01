@@ -8,8 +8,8 @@
 
 namespace PortaApiTest;
 
-use PortaApi\PortaConfig;
-use PortaApi\Exceptions\PortaAuthException;
+use Porta\Billing\PortaConfig;
+use Porta\Billing\Exceptions\PortaAuthException;
 
 /**
  * Test class for PortaConfig

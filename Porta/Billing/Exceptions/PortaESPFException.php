@@ -6,7 +6,7 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Exceptions;
+namespace Porta\Billing\Exceptions;
 
 /**
  * Exceptions to throw on specified ESPF errors

@@ -8,7 +8,7 @@
 
 namespace PortaApiTest\Session;
 
-use PortaApi\Session\SessionNoStorage;
+use Porta\Billing\Session\SessionNoStorage;
 
 /**
  * Test dumb storage 

@@ -9,7 +9,7 @@
 namespace PortaApiTest\Tools;
 
 use Firebase\JWT\JWT;
-use PortaApi\Components\BillingBase;
+use Porta\Billing\Components\BillingBase;
 
 /**
  * Test tool to crate and manage JWT tokens

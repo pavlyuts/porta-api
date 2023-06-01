@@ -8,7 +8,7 @@
 
 namespace PortaApiTest;
 
-use PortaApi\AsyncOperation;
+use Porta\Billing\AsyncOperation;
 use PortaApiTest\Tools\AsyncOperationNull;
 
 /**
@@ -29,10 +29,10 @@ class AsyncOperationTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(['responseKey' => 'responseValue'], $ao->getResponse());
 
         $ao = new AsyncOperation('/test', ['paramsKey' => 'paramsValue']);
-        $ao->processException(new \PortaApi\Exceptions\PortaException('TestMessage'));
+        $ao->processException(new \Porta\Billing\Exceptions\PortaException('TestMessage'));
         $this->assertTrue($ao->executed());
         $this->assertFalse($ao->success());
-        $this->assertInstanceOf(\PortaApi\Exceptions\PortaException::class, $ao->getException());
+        $this->assertInstanceOf(\Porta\Billing\Exceptions\PortaException::class, $ao->getException());
     }
 
     public function testAsyncOperationNull() {

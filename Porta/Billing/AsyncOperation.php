@@ -6,9 +6,9 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi;
+namespace Porta\Billing;
 
-use PortaApi\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaException;
 
 /**
  * Class to use with billign async operation

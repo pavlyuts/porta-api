@@ -6,7 +6,7 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Session;
+namespace Porta\Billing\Session;
 
 /**
  * Class to use PHP Session storage.

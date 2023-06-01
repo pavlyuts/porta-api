@@ -6,7 +6,7 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi;
+namespace Porta\Billing;
 
 /**
  * Interfaceto manage billing API cinfiguration

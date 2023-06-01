@@ -8,7 +8,7 @@
 
 namespace PortaApiTest;
 
-use PortaApi\Billing;
+use Porta\Billing\Billing;
 use GuzzleHttp\RequestOptions as RO;
 
 /**
@@ -20,7 +20,7 @@ class Live extends \PHPUnit\Framework\TestCase {
     protected static $billing;
 
     const CONFIG_TEMPLATE = "<?php\n\n"
-            . "use PortaApi\Config as C;\n"
+            . "use Porta\Billing\Config as C;\n"
             . "use GuzzleHttp\RequestOptions as RO;\n\n"
             . "\$testConfig = [\n"
             . "    C::HOST => 'billing-sip-host.dom',\n"
@@ -49,8 +49,8 @@ class Live extends \PHPUnit\Framework\TestCase {
             static::fail(self::NO_CONFIG_MESSAGE);
         }
         try {
-            self::$billing = new Billing(new \PortaApi\PortaConfig($testConfig['host'], $testConfig['account'], $testConfig['options']));
-        } catch (\PortaApi\Exceptions\PortaException $ex) {
+            self::$billing = new Billing(new \Porta\Billing\PortaConfig($testConfig['host'], $testConfig['account'], $testConfig['options']));
+        } catch (\Porta\Billing\Exceptions\PortaException $ex) {
             self::fail("Can't init billing class with provied config.\nError: {$ex->getMessage()}");
         }
     }
@@ -67,7 +67,7 @@ class Live extends \PHPUnit\Framework\TestCase {
     public function testGetCustomerInfo($customerList) {
         $list = [];
         foreach ($customerList as $customer) {
-            $list[] = new \PortaApi\AsyncOperation('Customer/get_customer_info', ['i_customer' => $customer['i_customer']]);
+            $list[] = new \Porta\Billing\AsyncOperation('Customer/get_customer_info', ['i_customer' => $customer['i_customer']]);
         }
         self::$billing->callAsync($list);
         foreach ($list as $item) {

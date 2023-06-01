@@ -6,9 +6,9 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Session;
+namespace Porta\Billing\Session;
 
-use PortaApi\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaException;
 
 /**
  * Use file as session data storage. Useful for server applications which use one 

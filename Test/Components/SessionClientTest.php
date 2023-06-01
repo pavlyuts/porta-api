@@ -8,9 +8,9 @@
 
 namespace PortaApiTest\Components;
 
-use PortaApi\Components\SessionClient;
-use PortaApi\Components\SessionManager;
-use PortaApi\PortaConfig;
+use Porta\Billing\Components\SessionClient;
+use Porta\Billing\Components\SessionManager;
+use Porta\Billing\PortaConfig;
 use PortaApiTest\Tools\SessionPHPClassStorage;
 use PortaApiTest\Tools\PortaToken;
 use GuzzleHttp\Psr7\Response;
@@ -58,7 +58,7 @@ class SessionClientTest extends \PortaApiTest\Tools\RequestTestCase {
         //var_dump($this->getRequst(0));
         //var_dump($this->getOptions(0));
 
-        $this->expectException(\PortaApi\Exceptions\PortaConnectException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaConnectException::class);
         $response = $c->request('POST', '/Test/get_test', []);
     }
 
@@ -73,7 +73,7 @@ class SessionClientTest extends \PortaApiTest\Tools\RequestTestCase {
                 [],
                 SessionClient::jsonResponse(new Response(200, []))
         );
-        $this->expectException(\PortaApi\Exceptions\PortaException::class);
+        $this->expectException(\Porta\Billing\Exceptions\PortaException::class);
         SessionClient::jsonResponse(new Response(200, [], 'NoJsonHere'));
     }
 

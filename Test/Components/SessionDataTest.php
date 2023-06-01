@@ -8,7 +8,7 @@
 
 namespace PortaApiTest\Components;
 
-use PortaApi\Components\SessionData;
+use Porta\Billing\Components\SessionData;
 use PortaApiTest\Tools\PortaToken;
 
 /**
@@ -25,7 +25,7 @@ class SessionDataTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals($data[SessionData::ACCESS_TOKEN], $d->getAccessToken());
         $this->assertEquals($data[SessionData::REFRESH_TOKEN], $d->getRefreshToken());
         $this->assertEquals(['Authorization' => 'Bearer ' . $data[SessionData::ACCESS_TOKEN]], $d->getAuthHeader());
-        $this->assertInstanceOf(\PortaApi\Components\PortaTokenDecoder::class, $d->getTokenDecoder());
+        $this->assertInstanceOf(\Porta\Billing\Components\PortaTokenDecoder::class, $d->getTokenDecoder());
         $this->assertEquals($data[SessionData::EXPIRES_AT], $d->getAccessTokenExpire()->format('Y-m-d H:i:s'));
         $d[SessionData::REFRESH_TOKEN] = 'test';
         $this->assertEquals($data[SessionData::REFRESH_TOKEN], $d->getRefreshToken());
@@ -51,7 +51,7 @@ class SessionDataTest extends \PHPUnit\Framework\TestCase {
         $this->assertNull($d->getAccessToken());
         $this->assertNull($d->getRefreshToken());
         $this->assertEquals([], $d->getAuthHeader());
-        $this->assertInstanceOf(\PortaApi\Components\PortaTokenDecoder::class, $decoder = $d->getTokenDecoder());
+        $this->assertInstanceOf(\Porta\Billing\Components\PortaTokenDecoder::class, $decoder = $d->getTokenDecoder());
         $this->assertFalse($decoder->isSet());
         $this->assertNull($d->getAccessTokenExpire());
     }

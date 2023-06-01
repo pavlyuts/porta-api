@@ -12,7 +12,7 @@ namespace PortaApiTest\Tools;
  * Class to test buypass of AsyncOperation
  *
  */
-class AsyncOperationNull extends \PortaApi\AsyncOperation {
+class AsyncOperationNull extends \Porta\Billing\AsyncOperation {
 
     public function __construct() {
         parent::__construct('');

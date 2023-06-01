@@ -6,11 +6,11 @@
  * (c) Alexey Pavlyuts <alexey@pavlyuts.ru>
  */
 
-namespace PortaApi\Exceptions;
+namespace Porta\Billing\Exceptions;
 
 use GuzzleHttp\Psr7\Response;
-use PortaApi\Exceptions\PortaException;
-use PortaApi\Exceptions\PortaAuthException;
+use Porta\Billing\Exceptions\PortaException;
+use Porta\Billing\Exceptions\PortaAuthException;
 
 /**
  * Exception to throw on specfied Portaone Billing API error
