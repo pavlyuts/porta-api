@@ -181,29 +181,21 @@
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Provides API base path, default is &#039;/rest&#039;, no trailig shash</dd>
+<dd>Provides API base path, default is &#039;/rest&#039;, no trailig slash</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Config.html#method_getEspfPath">getEspfPath()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Provides ESPF base path, default is &#039;/espf/v1&#039;, no trailig shash</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Porta-Billing-Config.html#method_getEspfUrl">getEspfUrl()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd></dd>
+<dd>Provides ESPF base path, default is &#039;/espf/v1&#039;, no trailig slash</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Config.html#method_getOptions">getOptions()</a>
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Provides Gizzle http call options
-Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/request-options.html&gt;</dd>
+<dd>Provides Gizzle http call options</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Config.html#method_getSessionRefreshMargin">getSessionRefreshMargin()</a>
@@ -217,14 +209,14 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Provides base server URI for all services like &#039;https://host.dom&#039;, no trailing slash.</dd>
+<dd>Provides base server URI for all services like `&#039;https://host.dom&#039;`, no trailing slash.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Config.html#method_hasAccount">hasAccount()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
-<dd>Returns true if accound record present in the config and correct.</dd>
+<dd>Returns true if accound record present in the config and it&#039;s correct.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Config.html#method_setAccount">setAccount()</a>
@@ -238,8 +230,7 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <span>
                                 &nbsp;: self    </span>
 </dt>
-<dd>Replace Guzzle http call options with a new set
-Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/request-options.html&gt;</dd>
+<dd>Replace Guzzle http call options with a new set</dd>
 
         </dl>
 
@@ -267,7 +258,7 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">37</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
@@ -285,7 +276,8 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>hostname/IP address of the server, no slashes, to schema, but port if required. Example: <code class="prettyprint">bill-sip.mycompany.com</code></p>
+                    <section class="phpdocumentor-description"><p>Hostname/IP address of the server, no slashes, no schema,
+but port if required. Example: <code class="prettyprint">bill-sip.mycompany.com</code></p>
 </section>
 
             </dd>
@@ -294,7 +286,13 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>account record, array with keys <code class="prettyprint">account</code>+<code class="prettyprint">password</code> or <code class="prettyprint">account</code>+<code class="prettyprint">token</code></p>
+                    <section class="phpdocumentor-description"><p>Account record to login to the billing. Combination
+of login+password or login+token required</p>
+<pre class="prettyprint"><code class="prettyprint">$account = [
+    'login' =&gt; 'myUserName',    // Mandatory username
+    'password' =&gt; 'myPassword', // When login with password
+    'token' =&gt; 'myToken'        // When login with API token
+</code></pre>
 </section>
 
             </dd>
@@ -303,7 +301,11 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>oprions, passed to Guzzle HTTP client. Check at <a href="https://docs.guzzlephp.org/en/stable/request-options.html">https://docs.guzzlephp.org/en/stable/request-options.html</a></p>
+                    <section class="phpdocumentor-description"><p>oprions, passed to Guzzle HTTP client.
+Check <a href="https://docs.guzzlephp.org/en/stable/request-options.html">Guzzle docs</a></p>
+<p>Please, mind that Guzze options only apply at the moment of wrapper class
+creation by it's __construct(), so if options set <strong>after</strong> the wrapper
+created - it will not be used.</p>
 </section>
 
             </dd>
@@ -312,13 +314,28 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">3600</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>margin in seconds before token expire time to trigger token refresh procedure.</p>
+                    <section class="phpdocumentor-description"><p>margin in seconds before token expire time to
+trigger token refresh procedure.</p>
 </section>
 
             </dd>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\Porta\Billing\Porta\Billing\Exceptions\PortaAuthException">PortaAuthException</abbr></span>
+                                                            
+                                             
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
@@ -339,7 +356,7 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">93</span>
 
     </aside>
 
@@ -387,11 +404,11 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">61</span>
+    <span class="phpdocumentor-element-found-in__line">77</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Provides API base path, default is &#039;/rest&#039;, no trailig shash</p>
+        <p class="phpdocumentor-summary">Provides API base path, default is &#039;/rest&#039;, no trailig slash</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -433,60 +450,15 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
+    <span class="phpdocumentor-element-found-in__line">85</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Provides ESPF base path, default is &#039;/espf/v1&#039;, no trailig shash</p>
+        <p class="phpdocumentor-summary">Provides ESPF base path, default is &#039;/espf/v1&#039;, no trailig slash</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getEspfPath</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-    
-    
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">inherit</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                             
-                                    </dd>
-                        </dl>
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_getEspfUrl">
-        getEspfUrl()
-        <a href="classes/Porta-Billing-Config.html#method_getEspfUrl" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">88</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getEspfUrl</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
     
@@ -524,12 +496,11 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">96</span>
+    <span class="phpdocumentor-element-found-in__line">104</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Provides Gizzle http call options
-Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/request-options.html&gt;</p>
+        <p class="phpdocumentor-summary">Provides Gizzle http call options</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -573,7 +544,7 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">104</span>
+    <span class="phpdocumentor-element-found-in__line">112</span>
 
     </aside>
 
@@ -621,11 +592,11 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Provides base server URI for all services like &#039;https://host.dom&#039;, no trailing slash.</p>
+        <p class="phpdocumentor-summary">Provides base server URI for all services like `&#039;https://host.dom&#039;`, no trailing slash.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -667,11 +638,11 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">112</span>
+    <span class="phpdocumentor-element-found-in__line">120</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns true if accound record present in the config and correct.</p>
+        <p class="phpdocumentor-summary">Returns true if accound record present in the config and it&#039;s correct.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -713,7 +684,7 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">120</span>
+    <span class="phpdocumentor-element-found-in__line">128</span>
 
     </aside>
 
@@ -731,8 +702,8 @@ Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/req
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>must have a pair of keys: 'account'+'password' or 'account'+'token'.
-null to clear account record out.</p>
+                    <section class="phpdocumentor-description"><p>must have a pair of keys: 'account'+'password'
+or 'account'+'token', null to clear account record out.</p>
 </section>
 
             </dd>
@@ -774,12 +745,11 @@ null to clear account record out.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Config.php"><a href="files/config.html"><abbr title="Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">137</span>
+    <span class="phpdocumentor-element-found-in__line">145</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Replace Guzzle http call options with a new set
-Be careful and consult Guzzle docs: &lt;https://docs.guzzlephp.org/en/stable/request-options.html&gt;</p>
+        <p class="phpdocumentor-summary">Replace Guzzle http call options with a new set</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>

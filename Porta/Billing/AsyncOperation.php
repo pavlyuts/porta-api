@@ -12,7 +12,7 @@ use Porta\Billing\Interfaces\AsyncOperationInterface;
 use Porta\Billing\Exceptions\PortaException;
 
 /**
- * Class to use with billign async operation
+ * Class to use with billing async operation
  *
  * Out-of-the-box Implementation of AsyncOperationInterface.
  * @api
@@ -81,8 +81,7 @@ class AsyncOperation implements AsyncOperationInterface {
     }
 
     /**
-     * Will return resul array or success call.
-     *
+     * Will return resul array on success call.
      *
      * @return array|null billing call dataset array, nul if called before processed
      * @api

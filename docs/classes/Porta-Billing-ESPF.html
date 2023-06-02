@@ -130,12 +130,26 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="ESPF.php"><a href="files/espf.html"><abbr title="ESPF.php">ESPF.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
             <p class="phpdocumentor-summary">Wrapper for ESPF API</p>
 
+    <section class="phpdocumentor-description"><p>The class is intended to provide interface to Portaone ESPF API. It handles
+authorisation, access token management and ESPF call handling.
+It needs:</p>
+<ul>
+<li>
+<a href="classes/Porta-Billing-Interfaces-ConfigInterface.html"><abbr title="\Porta\Billing\Interfaces\ConfigInterface">ConfigInterface</abbr></a> object as billing server host, account and call options configuration.</li>
+<li>
+<a href="classes/Porta-Billing-Interfaces-SessionStorageInterface.html"><abbr title="\Porta\Billing\Interfaces\SessionStorageInterface">SessionStorageInterface</abbr></a> object to store session data between invocanions.</li>
+</ul>
+<p>The difference ESPF to API call is that ESPF returns HTTP 40x codes in a case
+of request failure. These codes will throw <a href="classes/Porta-Billing-Exceptions-PortaESPFException.html"><abbr title="\Porta\Billing\Exceptions\PortaESPFException">PortaESPFException</abbr></a>. Meaning
+of each code depends of endpoint called.</p>
+<p>See 'API documentation' section on <a href="https://docs.portaone.com">https://docs.portaone.com</a></p>
+</section>
 
 
 
@@ -162,7 +176,28 @@
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Setup biling wrapper, load (if any) saved session state and get class ready to use</dd>
+<dd>Setup the class, load (if any) saved session state and get it ready to use</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Porta-Billing-Components-BillingBase.html#method_checkSession">checkSession()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Does active sesson check to billing server, relogin if required</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Porta-Billing-ESPF.html#method_delete">delete()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>DELETE ESPF request</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Porta-Billing-ESPF.html#method_get">get()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>GET ESPF request</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Components-BillingBase.html#method_getUsername">getUsername()</a>
@@ -172,11 +207,11 @@
 <dd>Return current user login name</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Porta-Billing-Components-BillingBase.html#method_isSessionUp">isSessionUp()</a>
+    <a href="classes/Porta-Billing-Components-BillingBase.html#method_isSessionPresent">isSessionPresent()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
-<dd>Return true if session is up</dd>
+<dd>Returns true if session data exit and not expired</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Components-BillingBase.html#method_login">login()</a>
@@ -191,6 +226,20 @@
                                 &nbsp;: void    </span>
 </dt>
 <dd>Closes the session explicitly.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Porta-Billing-ESPF.html#method_post">post()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>POST ESPF request</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Porta-Billing-ESPF.html#method_put">put()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>PUT ESPF request</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Porta-Billing-Components-BillingBase.html#method_timeToBilling">timeToBilling()</a>
@@ -268,11 +317,11 @@ timezone</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Setup biling wrapper, load (if any) saved session state and get class ready to use</p>
+        <p class="phpdocumentor-summary">Setup the class, load (if any) saved session state and get it ready to use</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -283,8 +332,10 @@ timezone</dd>
 <li>Loads saved session data from given SessinStorage object</li>
 <li>Check the session token expire time within margin or left</li>
 <li>If token expire soon (within configured margin), try to refresh token</li>
-<li>If token expired or refresh failed - try to relogin if account data present, throwing exceptions on failures.</li>
-<li>If no accoount data present, just left the class un-logged-in, then you need login() to get it connected</li>
+<li>If token expired or refresh failed - try to relogin if account data present,
+throwing exceptions on failures.</li>
+<li>If no accoount data present, just left the class un-logged-in, then you
+need login() to get it connected</li>
 </ul>
 </section>
 
@@ -295,14 +346,19 @@ timezone</dd>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/Porta-Billing-Interfaces-ConfigInterface.html"><abbr title="\Porta\Billing\Interfaces\ConfigInterface">ConfigInterface</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>Configuration object to run</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$storage</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/Porta-Billing-Interfaces-SessionStorageInterface.html"><abbr title="\Porta\Billing\Interfaces\SessionStorageInterface">SessionStorageInterface</abbr></a>|null</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>Session storage object to provide
+session persistance. SessionNoStorage used if null given.</p>
+</section>
+
             </dd>
             </dl>
 
@@ -320,6 +376,201 @@ timezone</dd>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_checkSession">
+        checkSession()
+        <a href="classes/Porta-Billing-Components-BillingBase.html#method_checkSession" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">120</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Does active sesson check to billing server, relogin if required</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">checkSession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"><p>Completes 'Session/ping' call to check session state, then:</p>
+<ul>
+<li>If session not recognised, and credentials present, trying to relogin</li>
+<li>If no credentials in config or login failure - throws auth exception</li>
+</ul>
+</section>
+
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/Porta-Billing-Exceptions-PortaAuthException.html"><abbr title="\Porta\Billing\Exceptions\PortaAuthException">PortaAuthException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>on relogin failed or
+no credentilas</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_delete">
+        delete()
+        <a href="classes/Porta-Billing-ESPF.html#method_delete" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ESPF.php"><a href="files/espf.html"><abbr title="ESPF.php">ESPF.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">109</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">DELETE ESPF request</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">delete</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$endpoint</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"><p>DELETE has no params, only endpoint. It returns HTTP 200 on success
+and 40x on failure, so the methid wil return nothing on success and throw
+PortaESPFException on error.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$endpoint</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>endpoint to call</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/Porta-Billing-Exceptions-PortaESPFException.html"><abbr title="\Porta\Billing\Exceptions\PortaESPFException">PortaESPFException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>on ESPF api error, check error coode with API docs</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get">
+        get()
+        <a href="classes/Porta-Billing-ESPF.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ESPF.php"><a href="files/espf.html"><abbr title="ESPF.php">ESPF.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">57</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">GET ESPF request</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$endpoint</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>Params will be encoded and send as query string</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$endpoint</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>endpoint to call</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>associative array of params, may omit</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/Porta-Billing-Exceptions-PortaESPFException.html"><abbr title="\Porta\Billing\Exceptions\PortaESPFException">PortaESPFException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>on ESPF api error, check error coode with API docs</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>associative array for returned JSON</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getUsername">
         getUsername()
         <a href="classes/Porta-Billing-Components-BillingBase.html#method_getUsername" class="headerlink"><i class="fas fa-link"></i></a>
@@ -327,7 +578,7 @@ timezone</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">102</span>
+    <span class="phpdocumentor-element-found-in__line">132</span>
 
     </aside>
 
@@ -346,11 +597,7 @@ timezone</dd>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"><ul>
-<li>username</li>
-</ul>
-</section>
-
+        
     
 </article>
                     <article
@@ -359,25 +606,28 @@ timezone</dd>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_isSessionUp">
-        isSessionUp()
-        <a href="classes/Porta-Billing-Components-BillingBase.html#method_isSessionUp" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_isSessionPresent">
+        isSessionPresent()
+        <a href="classes/Porta-Billing-Components-BillingBase.html#method_isSessionPresent" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">90</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Return true if session is up</p>
+        <p class="phpdocumentor-summary">Returns true if session data exit and not expired</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">isSessionUp</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">isSessionPresent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
         <section class="phpdocumentor-description"><p>Returns true if session data (token) exists and not expired, false if
 not logged in for any reason.</p>
+<p>Does not complete active sesion check to the server. Due of serveer configuratioin
+issues token may be invalidated for inactivity before it's expire time really
+has come. So, positive isSessionUp() only means persistent session data loaded,</p>
 </section>
 
     
@@ -402,7 +652,7 @@ not logged in for any reason.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">74</span>
 
     </aside>
 
@@ -422,7 +672,13 @@ not logged in for any reason.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The same structure as used in PortaConfig, associative array for 'login'+'password' or 'login'+'token' keys</p>
+                    <section class="phpdocumentor-description"><p>Account record to login to the billing. Combination
+of login+password or login+token required</p>
+<pre class="prettyprint"><code class="prettyprint">$account = [
+    'login' =&gt; 'myUserName',    // Mandatory username
+    'password' =&gt; 'myPassword', // When login with password
+    'token' =&gt; 'myToken'        // When login with API token
+</code></pre>
 </section>
 
             </dd>
@@ -435,14 +691,6 @@ not logged in for any reason.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                <span class="phpdocumentor-tag-link"><a href="classes/Porta-Billing-Exceptions-PortaConnectException.html"><abbr title="\Porta\Billing\Exceptions\PortaConnectException">PortaConnectException</abbr></a></span>
-                                                            
-                                             
-                                    </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">throws</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -471,7 +719,7 @@ not logged in for any reason.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">88</span>
 
     </aside>
 
@@ -481,7 +729,9 @@ not logged in for any reason.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">logout</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"><p>Will call '/Session/logout' api method. Due of some problems with Portaone resposes, session will considered closed whatever server respond. No server error will be respected, but conenction errors will thrown.</p>
+        <section class="phpdocumentor-description"><p>Will call '/Session/logout' api method. Due of some problems with Portaone
+resposes, session will considered closed whatever server respond. No server
+error will be respected, but conenction errors will thrown.</p>
 </section>
 
     
@@ -511,6 +761,154 @@ not logged in for any reason.</p>
         class="phpdocumentor-element
             -method
             -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_post">
+        post()
+        <a href="classes/Porta-Billing-ESPF.html#method_post" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ESPF.php"><a href="files/espf.html"><abbr title="ESPF.php">ESPF.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">74</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">POST ESPF request</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">post</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$endpoint</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>Params will be encoded and sent as JSON body</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$endpoint</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>endpoint to call</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>associative array of params, may omit</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/Porta-Billing-Exceptions-PortaESPFException.html"><abbr title="\Porta\Billing\Exceptions\PortaESPFException">PortaESPFException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>on ESPF api error, check error coode with API docs</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>associative array for returned JSON or empty array on empty billing answer</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_put">
+        put()
+        <a href="classes/Porta-Billing-ESPF.html#method_put" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="ESPF.php"><a href="files/espf.html"><abbr title="ESPF.php">ESPF.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">91</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">PUT ESPF request</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">put</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$endpoint</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$params</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>Params are mandatory and will be encoded and sent as JSON body</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$endpoint</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>endpoint to call</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$params</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>associative array of params, mandatory</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/Porta-Billing-Exceptions-PortaESPFException.html"><abbr title="\Porta\Billing\Exceptions\PortaESPFException">PortaESPFException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>on ESPF api error, check error coode with API docs</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>associative array for returned JSON.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
                                     -static                    "
 >
     <h4 class="phpdocumentor-element__name" id="method_timeToBilling">
@@ -520,7 +918,7 @@ not logged in for any reason.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">196</span>
+    <span class="phpdocumentor-element-found-in__line">226</span>
 
     </aside>
 
@@ -569,7 +967,7 @@ not logged in for any reason.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Components/BillingBase.php"><a href="files/components-billingbase.html"><abbr title="Components/BillingBase.php">BillingBase.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">183</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 

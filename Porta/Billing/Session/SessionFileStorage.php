@@ -12,11 +12,14 @@ use Porta\Billing\Interfaces\SessionStorageInterface;
 use Porta\Billing\Exceptions\PortaException;
 
 /**
- * Use file as session data storage. Useful for server applications which use one
- * account to access the billing and share the session auth data.
+ * Use file as session data storage.
  *
- * @api
+ * This storage is useful for server applications which use one account to access the billing and share the session auth data.
+ *
+ * It will do the best to lock from concurent processes on sesson refresh, but there no way to guarantee the lock. Please, let me know in a cse you really use it under high concurrent load.
+ *
  * @package SessionStorage
+ * @api
  */
 class SessionFileStorage implements SessionStorageInterface {
 
@@ -32,6 +35,13 @@ class SessionFileStorage implements SessionStorageInterface {
         }
     }
 
+    /**
+     * Setup storage to use file
+     *
+     * @param string $fileName name of the file to use as persistent session storage
+     * @param int $timeout file lock timeout in milliseconds
+     * @api
+     */
     public function __construct(string $fileName, int $timeout = 300) {
         $this->fileName = $fileName;
         $this->timeout = $timeout / 1000;
@@ -44,6 +54,7 @@ class SessionFileStorage implements SessionStorageInterface {
         }
     }
 
+    /** @inherit */
     public function startUpdate(): bool {
         if ($this->lock) {
             return true;
@@ -56,6 +67,7 @@ class SessionFileStorage implements SessionStorageInterface {
         return true;
     }
 
+    /** @inherit */
     public function load(): ?array {
         if (!file_exists($this->fileName)) {
             return null;
@@ -80,16 +92,19 @@ class SessionFileStorage implements SessionStorageInterface {
         }
     }
 
+    /** @inherit */
     protected function setLock() {
         if (!@touch($this->fileName . self::UPD_POSTFIX)) {
             throw new PortaException("Can't write session data lock file " . $this->fileName . self::UPD_POSTFIX);
         }
     }
 
+    /** @inherit */
     protected function isLocked() {
         return file_exists($this->fileName . self::UPD_POSTFIX);
     }
 
+    /** @inherit */
     protected function waitUnlock() {
         $t = microtime(true) + $this->timeout;
         while ($this->isLocked()) {
@@ -100,6 +115,7 @@ class SessionFileStorage implements SessionStorageInterface {
         }
     }
 
+    /** @inherit */
     protected function removeLock() {
         if (file_exists($this->fileName . self::UPD_POSTFIX)) {
             unlink($this->fileName . self::UPD_POSTFIX);

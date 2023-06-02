@@ -14,7 +14,7 @@ use Porta\Billing\Exceptions\PortaException;
 use GuzzleHttp\Psr7\Response;
 
 /**
- * Base class implementing the shared functions of API and ESPF
+ * Base abstract class implementing shared functions of API and ESPF
  *
  * @abstract
  * @api
@@ -38,11 +38,14 @@ abstract class BillingBase {
      * - Loads saved session data from given SessinStorage object
      * - Check the session token expire time within margin or left
      * - If token expire soon (within configured margin), try to refresh token
-     * - If token expired or refresh failed - try to relogin if account data present, throwing exceptions on failures.
-     * - If no accoount data present, just left the class un-logged-in, then you need login() to get it connected
+     * - If token expired or refresh failed - try to relogin if account data present,
+     * throwing exceptions on failures.
+     * - If no accoount data present, just left the class un-logged-in, then you
+     * need login() to get it connected
      *
      * @param ConfigInterface $config Configuration object to run
-     * @param SessionStorageInterface|null $storage Session storage object to provide session persistance
+     * @param SessionStorageInterface|null $storage Session storage object to provide
+     * session persistance. SessionNoStorage used if null given.
      * @api
      * @package Internal
      */
@@ -57,8 +60,14 @@ abstract class BillingBase {
      *
      * The session data will be stored if session storage class is supplied
      *
-     * @param array $account The same structure as used in PortaConfig, associative array for 'login'+'password' or 'login'+'token' keys
-     * @throws \Porta\Billing\Exceptions\PortaConnectException
+     * @param array $account Account record to login to the billing. Combination
+     * of login+password or login+token required
+     * ```
+     * $account = [
+     *     'login' => 'myUserName',    // Mandatory username
+     *     'password' => 'myPassword', // When login with password
+     *     'token' => 'myToken'        // When login with API token
+     * ```
      * @throws \Porta\Billing\Exceptions\PortaAuthException
      * @api
      */
@@ -69,7 +78,9 @@ abstract class BillingBase {
     /**
      * Closes the session explicitly.
      *
-     * Will call '/Session/logout' api method. Due of some problems with Portaone resposes, session will considered closed whatever server respond. No server error will be respected, but conenction errors will thrown.
+     * Will call '/Session/logout' api method. Due of some problems with Portaone
+     * resposes, session will considered closed whatever server respond. No server
+     * error will be respected, but conenction errors will thrown.
      *
      * @throws \Porta\Billing\Exceptions\PortaConnectException
      * @api
@@ -99,10 +110,11 @@ abstract class BillingBase {
      * Does active sesson check to billing server, relogin if required
      *
      * Completes 'Session/ping' call to check session state, then:
-     * - If session not recognised, and ccredentials present, trying to relogin
+     * - If session not recognised, and credentials present, trying to relogin
      * - If no credentials in config or login failure - throws auth exception
      *
-     * @throws PortaAuthException on relogin failed or no credentilas
+     * @throws \Porta\Billing\Exceptions\PortaAuthException on relogin failed or
+     * no credentilas
      * @api
      */
     public function checkSession(): void {
@@ -114,7 +126,7 @@ abstract class BillingBase {
      *
      * Returns username taken from access token or null if no session is up
      *
-     * @return string|null - username
+     * @return string|null
      * @api
      */
     public function getUsername(): ?string {
@@ -167,14 +179,14 @@ abstract class BillingBase {
         return $result;
     }
 
-    /*
+    /**
      * Provides base path for the service on the server.
      *
      * @abstract
      */
     abstract protected function getPathBase(): string;
 
-    /*
+    /**
      * Called to process errors with application-specific manner
      *
      * @abstract

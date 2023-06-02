@@ -27,11 +27,27 @@ class Config implements ConfigInterface {
     /**
      * Setup configuration object
      *
-     * @param string $host hostname/IP address of the server, no slashes, to schema, but port if required. Example: `bill-sip.mycompany.com`
-     * @param array|null $account account record, array with keys `account`+`password` or `account`+`token`
-     * @param array $options oprions, passed to Guzzle HTTP client. Check at <https://docs.guzzlephp.org/en/stable/request-options.html>
-     * @param int $refreshMargin margin in seconds before token expire time to trigger token refresh procedure.
+     * @param string $host Hostname/IP address of the server, no slashes, no schema,
+     * but port if required. Example: `bill-sip.mycompany.com`
+     * @param array|null $account Account record to login to the billing. Combination
+     * of login+password or login+token required
+     * ```
+     * $account = [
+     *     'login' => 'myUserName',    // Mandatory username
+     *     'password' => 'myPassword', // When login with password
+     *     'token' => 'myToken'        // When login with API token
+     * ```
+     * @param array $options oprions, passed to Guzzle HTTP client.
+     * Check [Guzzle docs](https://docs.guzzlephp.org/en/stable/request-options.html)
      *
+     * Please, mind that Guzze options only apply at the moment of wrapper class
+     * creation by it's __construct(), so if options set **after** the wrapper
+     * created - it will not be used.
+     *
+     * @param int $refreshMargin margin in seconds before token expire time to
+     * trigger token refresh procedure.
+     *
+     * @throws Porta\Billing\Exceptions\PortaAuthException
      * @api
      */
     public function __construct(

@@ -124,14 +124,26 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Interfaces/AsyncOperationInterface.php"><a href="files/interfaces-asyncoperationinterface.html"><abbr title="Interfaces/AsyncOperationInterface.php">AsyncOperationInterface.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
             <p class="phpdocumentor-summary">Interface for element of bulk async call to the billing. Represents one API call task.</p>
 
-    <section class="phpdocumentor-description"><p>Used by Billing-&gt;callAsync() as array element.
-See AsyncOperaton implementation.</p>
+    <section class="phpdocumentor-description"><p>How it works:</p>
+<ul>
+<li>callAsync() crawl given iterable recursively to find all objects, implementing AsyncOperationInterface</li>
+<li>For each object, it will get the API endpoint by calling <code class="prettyprint">getCallEndpoint()</code> and call params by calling <code class="prettyprint">getCallParams()</code>
+</li>
+<li>All the found array will be called in parallel with respect to desired concurrency level</li>
+<li>For each object:
+<ul>
+<li>if the call was succed, the result will put to the object by call processResponse()</li>
+<li>in a case of failure exception object will put to the object by calling processException()</li>
+</ul>
+</li>
+</ul>
+<p>Finally we have each object filled with call result, good or bad.</p>
 </section>
 
 
@@ -199,7 +211,7 @@ See AsyncOperaton implementation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Interfaces/AsyncOperationInterface.php"><a href="files/interfaces-asyncoperationinterface.html"><abbr title="Interfaces/AsyncOperationInterface.php">AsyncOperationInterface.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">32</span>
+    <span class="phpdocumentor-element-found-in__line">39</span>
 
     </aside>
 
@@ -234,7 +246,7 @@ See AsyncOperaton implementation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Interfaces/AsyncOperationInterface.php"><a href="files/interfaces-asyncoperationinterface.html"><abbr title="Interfaces/AsyncOperationInterface.php">AsyncOperationInterface.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">47</span>
 
     </aside>
 
@@ -267,7 +279,7 @@ See AsyncOperaton implementation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Interfaces/AsyncOperationInterface.php"><a href="files/interfaces-asyncoperationinterface.html"><abbr title="Interfaces/AsyncOperationInterface.php">AsyncOperationInterface.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">56</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
@@ -312,7 +324,7 @@ See AsyncOperaton implementation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Interfaces/AsyncOperationInterface.php"><a href="files/interfaces-asyncoperationinterface.html"><abbr title="Interfaces/AsyncOperationInterface.php">AsyncOperationInterface.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
     </aside>
 
@@ -330,7 +342,8 @@ See AsyncOperaton implementation.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
+                    <section class="phpdocumentor-description"><p>the dataset, returned by billing</p>
+</section>
 
             </dd>
             </dl>

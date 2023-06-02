@@ -25,12 +25,13 @@ use Porta\Billing\Exceptions\PortaConnectException;
 /**
  * Billing API wrapper
  *
- * The class is intended to provide interface to Portaone billing API. It handles authorisation, access token management and API call hndling.
+ * The class is intended to provide interface to Portaone billing API. It handles
+ * authorisation, access token management and API call handling.
  * It needs:
- * - PortaConfigInterface object as billing server, account and call options configuration.
- * - SessionStorageInterface object to store session data between invocanions.
+ * - {@see ConfigInterface} object as billing server host, account and call options configuration.
+ * - {@see SessionStorageInterface} object to store session data between invocanions.
  *
- * See 'API documentation' section on https://docs.portaone.com
+ * See 'API documentation' section on <https://docs.portaone.com>
  * @api
  * @package Billing
  */
@@ -38,7 +39,7 @@ class Billing extends BillingBase {
 
     /**
      * @inherit
-     * @api
+     * @package Billing
      */
     public function __construct(ConfigInterface $config, ?SessionStorageInterface $storage = null) {
         parent::__construct($config, $storage);
@@ -48,17 +49,21 @@ class Billing extends BillingBase {
      * Perform billing API call.
      *
      * Reference to your billing system API docs, located
-     * at https://your-billing-sip-host/doc/api/ or API docs section of Portaone
-     * docs site https://docs.portaone.com/. Mind your billing release version.
+     * at **https://your-billing-sip-host/doc/api/** or API section of Portaone
+     * docs site <https://docs.portaone.com/>. Mind your billing release version.
      *
      * @param string $endpoint API endpoint as per docs, exapmle: '/Customer/get_customer_info'
      * @param array $params API requst data to put into "params" section
      *
-     * @return array Billing system answer, converted to associative array. If billing retuns file, returns array with keys:
-     * 'filename' => string, returned file name,
-     * 'mime' => string, MIME file type
-     * 'stream' => PSR-7 stream object with file
-     *
+     * @return array Billing system answer, converted to associative array. If
+     * billing retuns file, returns array with keys:
+     * ```
+     * $returned = [
+     *     'filename' => 'Invoice1234.pdf', // string, returned file name,
+     *     'mime' => 'application/pdf',     // string, MIME file type
+     *     'stream' => Stream               // PSR-7 stream object with file
+     * ];
+     * ```
      * @throws PortaException on general errors
      * @throws PortaAuthException on auth-related errors
      * @throws PortaApiException on API returned an error
@@ -73,16 +78,32 @@ class Billing extends BillingBase {
     /**
      * Perform bulk async billig call, running multiple concurrent requests at once.
      *
-     * Method taking an array or any other traversable of of AsyncOperationInterface objects an process it in parallel with given concurrency (default 20). After run, the objects filled with answers or exceptions depending of each separate call results.
+     * Method crawling recursively the traversable given to find all
+     * {@see Interfaces\AsyncOperationInterface} objects and then
+     * process it in parallel with given concurrency (default 20). After run, the
+     * objects filled with answers or exceptions depending of each separate call
+     * results. it is safe as if there no object, it just do nothing silently,
+     * but still do a session check call.
      *
-     * To avoid time wasting and return of all object filled with error due of broken sesson state, it validate session to the billing before the bulk call throw exception if session is not valid. This means one extra call to the billing before each bulk call start.
+     * On every callAsync() will first check session state with active call to the
+     * biling (/Session/ping) to avoid time wasting and return of all object filled
+     * with error due of broken sesson state. If the session fail and credentials
+     * present, it will try relogin. If no credential or login filed, it will throw
+     * PortaAuthException.
      *
-     * @param AsyncOperationInterface[] $operations array or any other traversable list of  of
-     *        objects, implementing BillingAsyncOperationInterface
+     * @param iterable $operations array or any other multi-level iterable, containing
+     *        objects, implementing AsyncOperationInterface
      *
-     * @param int $concurency how much calls to run in parallel. Default is 20. <i>WARNING: due of some reasons increasing of concurrency does not decrease overall time to complete all the requests. In fact, PHP does not support async operations, so all the magic comes from cURL multi-call.</i>
+     * @param int $concurency how much calls to run in parallel. Default is 20.
      *
-     * @throws PortaAuthException
+     * **WARNING: due of some reasons increasing of concurrency over some empiric
+     * value does not decrease overall time to complete all the requests and even
+     * make it longer. In fact, PHP does not support async operations, so all the
+     * magic comes from cURL multi-call, so it could be combination of limitations:
+     * cURL, PortaOne server and PHP itlself. As for me, 20 works fine.**
+     *
+     * @throws PortaAuthException in a case of sesson is expired/broken and there
+     * no credentials to relogin
      * @api
      */
     public function callAsync(iterable $operations, int $concurency = 20): void {
@@ -141,19 +162,34 @@ class Billing extends BillingBase {
      * Same as call(), but if API returns an array with one element (mostly answers
      * has just one key like 'customer_list'), it will cut one level and return the list
      * itself. If the Billing returns more that one element on the top level, it returns
-     * the whole array. Sample: instead of ['customer_list' => [{customer data here}]]
-     * it will return [{customer data here}] array directly.
-     *
-     * Use with care as the retorn depends of API call params and may be unclear.
+     * the whole array. Sample:
+     * ```
+     * // Instead of:
+     * $answer = [
+     *     'customer_list' => [
+     *         {customer data here}
+     *     ]
+     * ];
+     * // it will return enclosed array:
+     * $answer = [
+     *     {customer data here}
+     * ];
+     * ```
+     * **Use with care as the return depends of API call params and may be unexpectable**
      *
      * @param string $endpoint API endpoint as per docs, exapmle: '/Customer/get_customer_info'
      * @param array $params API requst data to put into "params" section
      *
-     * @return array Billing system answer, converted to associative array, cut one level if the returned array has only one key on the top level.
-     *               If billing retuns file, returns array of two keys:
-     *               'filename' => string, returned file name,
-     *               'mime' => string, content-type,
-     *               'stream' => PSR-7 stream object with file
+     * @return array Billing system answer, converted to associative array, cut
+     * one level if the returned array has only one key on the top level. If
+     * billing retuns file, returns array with keys:
+     * ```
+     * $answer = [
+     *     'filename' => 'Invoice1234.pdf', // string, returned file name,
+     *     'mime' => 'application/pdf',     // string, MIME file type
+     *     'stream' => Stream               // PSR-7 stream object with file
+     * ];
+     * ```
      *
      * @throws PortaException on general errors
      * @throws PortaAuthException on auth-related errors

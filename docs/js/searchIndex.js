@@ -3,7 +3,7 @@ Search.appendIndex(
                 {
             "fqsen": "\\Porta\\Billing\\AsyncOperation",
             "name": "AsyncOperation",
-            "summary": "Class\u0020to\u0020use\u0020with\u0020billign\u0020async\u0020operation",
+            "summary": "Class\u0020to\u0020use\u0020with\u0020billing\u0020async\u0020operation",
             "url": "classes/Porta-Billing-AsyncOperation.html"
         },                {
             "fqsen": "\\Porta\\Billing\\AsyncOperation\u003A\u003A__construct\u0028\u0029",
@@ -23,7 +23,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\AsyncOperation\u003A\u003AgetResponse\u0028\u0029",
             "name": "getResponse",
-            "summary": "Will\u0020return\u0020resul\u0020array\u0020or\u0020success\u0020call.",
+            "summary": "Will\u0020return\u0020resul\u0020array\u0020on\u0020success\u0020call.",
             "url": "classes/Porta-Billing-AsyncOperation.html#method_getResponse"
         },                {
             "fqsen": "\\Porta\\Billing\\AsyncOperation\u003A\u003AgetException\u0028\u0029",
@@ -35,11 +35,6 @@ Search.appendIndex(
             "name": "Billing",
             "summary": "Billing\u0020API\u0020wrapper",
             "url": "classes/Porta-Billing-Billing.html"
-        },                {
-            "fqsen": "\\Porta\\Billing\\Billing\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Setup\u0020biling\u0020wrapper,\u0020load\u0020\u0028if\u0020any\u0029\u0020saved\u0020session\u0020state\u0020and\u0020get\u0020class\u0020ready\u0020to\u0020use",
-            "url": "classes/Porta-Billing-Billing.html#method___construct"
         },                {
             "fqsen": "\\Porta\\Billing\\Billing\u003A\u003Acall\u0028\u0029",
             "name": "call",
@@ -58,12 +53,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\Components\\BillingBase",
             "name": "BillingBase",
-            "summary": "Base\u0020class\u0020implementing\u0020the\u0020shared\u0020functions\u0020of\u0020API\u0020and\u0020ESPF",
+            "summary": "Base\u0020abstract\u0020class\u0020implementing\u0020shared\u0020functions\u0020of\u0020API\u0020and\u0020ESPF",
             "url": "classes/Porta-Billing-Components-BillingBase.html"
         },                {
             "fqsen": "\\Porta\\Billing\\Components\\BillingBase\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Setup\u0020biling\u0020wrapper,\u0020load\u0020\u0028if\u0020any\u0029\u0020saved\u0020session\u0020state\u0020and\u0020get\u0020class\u0020ready\u0020to\u0020use",
+            "summary": "Setup\u0020the\u0020class,\u0020load\u0020\u0028if\u0020any\u0029\u0020saved\u0020session\u0020state\u0020and\u0020get\u0020it\u0020ready\u0020to\u0020use",
             "url": "classes/Porta-Billing-Components-BillingBase.html#method___construct"
         },                {
             "fqsen": "\\Porta\\Billing\\Components\\BillingBase\u003A\u003Alogin\u0028\u0029",
@@ -76,10 +71,15 @@ Search.appendIndex(
             "summary": "Closes\u0020the\u0020session\u0020explicitly.",
             "url": "classes/Porta-Billing-Components-BillingBase.html#method_logout"
         },                {
-            "fqsen": "\\Porta\\Billing\\Components\\BillingBase\u003A\u003AisSessionUp\u0028\u0029",
-            "name": "isSessionUp",
-            "summary": "Return\u0020true\u0020if\u0020session\u0020is\u0020up",
-            "url": "classes/Porta-Billing-Components-BillingBase.html#method_isSessionUp"
+            "fqsen": "\\Porta\\Billing\\Components\\BillingBase\u003A\u003AisSessionPresent\u0028\u0029",
+            "name": "isSessionPresent",
+            "summary": "Returns\u0020true\u0020if\u0020session\u0020data\u0020exit\u0020and\u0020not\u0020expired",
+            "url": "classes/Porta-Billing-Components-BillingBase.html#method_isSessionPresent"
+        },                {
+            "fqsen": "\\Porta\\Billing\\Components\\BillingBase\u003A\u003AcheckSession\u0028\u0029",
+            "name": "checkSession",
+            "summary": "Does\u0020active\u0020sesson\u0020check\u0020to\u0020billing\u0020server,\u0020relogin\u0020if\u0020required",
+            "url": "classes/Porta-Billing-Components-BillingBase.html#method_checkSession"
         },                {
             "fqsen": "\\Porta\\Billing\\Components\\BillingBase\u003A\u003AgetUsername\u0028\u0029",
             "name": "getUsername",
@@ -113,17 +113,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetUrl\u0028\u0029",
             "name": "getUrl",
-            "summary": "Provides\u0020base\u0020server\u0020URI\u0020for\u0020all\u0020services\u0020like\u0020\u0027https\u003A\/\/host.dom\u0027,\u0020no\u0020trailing\u0020slash.",
+            "summary": "Provides\u0020base\u0020server\u0020URI\u0020for\u0020all\u0020services\u0020like\u0020\u0060\u0027https\u003A\/\/host.dom\u0027\u0060,\u0020no\u0020trailing\u0020slash.",
             "url": "classes/Porta-Billing-Config.html#method_getUrl"
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetAPIPath\u0028\u0029",
             "name": "getAPIPath",
-            "summary": "Provides\u0020API\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/rest\u0027,\u0020no\u0020trailig\u0020shash",
+            "summary": "Provides\u0020API\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/rest\u0027,\u0020no\u0020trailig\u0020slash",
             "url": "classes/Porta-Billing-Config.html#method_getAPIPath"
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetEspfPath\u0028\u0029",
             "name": "getEspfPath",
-            "summary": "Provides\u0020ESPF\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/espf\/v1\u0027,\u0020no\u0020trailig\u0020shash",
+            "summary": "Provides\u0020ESPF\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/espf\/v1\u0027,\u0020no\u0020trailig\u0020slash",
             "url": "classes/Porta-Billing-Config.html#method_getEspfPath"
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetAccount\u0028\u0029",
@@ -131,14 +131,9 @@ Search.appendIndex(
             "summary": "Provides\u0020account\u0020record\u0020or\u0020throw\u0020PortaAuthException\u0020if\u0020there\u0020no\u0020record\u0020inside.",
             "url": "classes/Porta-Billing-Config.html#method_getAccount"
         },                {
-            "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetEspfUrl\u0028\u0029",
-            "name": "getEspfUrl",
-            "summary": "",
-            "url": "classes/Porta-Billing-Config.html#method_getEspfUrl"
-        },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetOptions\u0028\u0029",
             "name": "getOptions",
-            "summary": "Provides\u0020Gizzle\u0020http\u0020call\u0020options\nBe\u0020careful\u0020and\u0020consult\u0020Guzzle\u0020docs\u003A\u0020\u003Chttps\u003A\/\/docs.guzzlephp.org\/en\/stable\/request\u002Doptions.html\u003E",
+            "summary": "Provides\u0020Gizzle\u0020http\u0020call\u0020options",
             "url": "classes/Porta-Billing-Config.html#method_getOptions"
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AgetSessionRefreshMargin\u0028\u0029",
@@ -148,7 +143,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AhasAccount\u0028\u0029",
             "name": "hasAccount",
-            "summary": "Returns\u0020true\u0020if\u0020accound\u0020record\u0020present\u0020in\u0020the\u0020config\u0020and\u0020correct.",
+            "summary": "Returns\u0020true\u0020if\u0020accound\u0020record\u0020present\u0020in\u0020the\u0020config\u0020and\u0020it\u0027s\u0020correct.",
             "url": "classes/Porta-Billing-Config.html#method_hasAccount"
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AsetAccount\u0028\u0029",
@@ -158,13 +153,33 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\Config\u003A\u003AsetOptions\u0028\u0029",
             "name": "setOptions",
-            "summary": "Replace\u0020Guzzle\u0020http\u0020call\u0020options\u0020with\u0020a\u0020new\u0020set\nBe\u0020careful\u0020and\u0020consult\u0020Guzzle\u0020docs\u003A\u0020\u003Chttps\u003A\/\/docs.guzzlephp.org\/en\/stable\/request\u002Doptions.html\u003E",
+            "summary": "Replace\u0020Guzzle\u0020http\u0020call\u0020options\u0020with\u0020a\u0020new\u0020set",
             "url": "classes/Porta-Billing-Config.html#method_setOptions"
         },                {
             "fqsen": "\\Porta\\Billing\\ESPF",
             "name": "ESPF",
             "summary": "Wrapper\u0020for\u0020ESPF\u0020API",
             "url": "classes/Porta-Billing-ESPF.html"
+        },                {
+            "fqsen": "\\Porta\\Billing\\ESPF\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "GET\u0020ESPF\u0020request",
+            "url": "classes/Porta-Billing-ESPF.html#method_get"
+        },                {
+            "fqsen": "\\Porta\\Billing\\ESPF\u003A\u003Apost\u0028\u0029",
+            "name": "post",
+            "summary": "POST\u0020ESPF\u0020request",
+            "url": "classes/Porta-Billing-ESPF.html#method_post"
+        },                {
+            "fqsen": "\\Porta\\Billing\\ESPF\u003A\u003Aput\u0028\u0029",
+            "name": "put",
+            "summary": "PUT\u0020ESPF\u0020request",
+            "url": "classes/Porta-Billing-ESPF.html#method_put"
+        },                {
+            "fqsen": "\\Porta\\Billing\\ESPF\u003A\u003Adelete\u0028\u0029",
+            "name": "delete",
+            "summary": "DELETE\u0020ESPF\u0020request",
+            "url": "classes/Porta-Billing-ESPF.html#method_delete"
         },                {
             "fqsen": "\\Porta\\Billing\\Exceptions\\PortaApiException",
             "name": "PortaApiException",
@@ -223,22 +238,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AgetUrl\u0028\u0029",
             "name": "getUrl",
-            "summary": "Provides\u0020base\u0020server\u0020URI\u0020for\u0020all\u0020services\u0020like\u0020\u0027https\u003A\/\/host.dom\u0027,\u0020no\u0020trailing\u0020slash.",
+            "summary": "Provides\u0020base\u0020server\u0020URI\u0020for\u0020all\u0020services\u0020like\u0020\u0060\u0027https\u003A\/\/host.dom\u0027\u0060,\u0020no\u0020trailing\u0020slash.",
             "url": "classes/Porta-Billing-Interfaces-ConfigInterface.html#method_getUrl"
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AgetAPIPath\u0028\u0029",
             "name": "getAPIPath",
-            "summary": "Provides\u0020API\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/rest\u0027,\u0020no\u0020trailig\u0020shash",
+            "summary": "Provides\u0020API\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/rest\u0027,\u0020no\u0020trailig\u0020slash",
             "url": "classes/Porta-Billing-Interfaces-ConfigInterface.html#method_getAPIPath"
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AgetEspfPath\u0028\u0029",
             "name": "getEspfPath",
-            "summary": "Provides\u0020ESPF\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/espf\/v1\u0027,\u0020no\u0020trailig\u0020shash",
+            "summary": "Provides\u0020ESPF\u0020base\u0020path,\u0020default\u0020is\u0020\u0027\/espf\/v1\u0027,\u0020no\u0020trailig\u0020slash",
             "url": "classes/Porta-Billing-Interfaces-ConfigInterface.html#method_getEspfPath"
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AhasAccount\u0028\u0029",
             "name": "hasAccount",
-            "summary": "Returns\u0020true\u0020if\u0020accound\u0020record\u0020present\u0020in\u0020the\u0020config\u0020and\u0020correct.",
+            "summary": "Returns\u0020true\u0020if\u0020accound\u0020record\u0020present\u0020in\u0020the\u0020config\u0020and\u0020it\u0027s\u0020correct.",
             "url": "classes/Porta-Billing-Interfaces-ConfigInterface.html#method_hasAccount"
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AgetAccount\u0028\u0029",
@@ -253,12 +268,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AgetOptions\u0028\u0029",
             "name": "getOptions",
-            "summary": "Provides\u0020Gizzle\u0020http\u0020call\u0020options\nBe\u0020careful\u0020and\u0020consult\u0020Guzzle\u0020docs\u003A\u0020\u003Chttps\u003A\/\/docs.guzzlephp.org\/en\/stable\/request\u002Doptions.html\u003E",
+            "summary": "Provides\u0020Gizzle\u0020http\u0020call\u0020options",
             "url": "classes/Porta-Billing-Interfaces-ConfigInterface.html#method_getOptions"
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AsetOptions\u0028\u0029",
             "name": "setOptions",
-            "summary": "Replace\u0020Guzzle\u0020http\u0020call\u0020options\u0020with\u0020a\u0020new\u0020set\nBe\u0020careful\u0020and\u0020consult\u0020Guzzle\u0020docs\u003A\u0020\u003Chttps\u003A\/\/docs.guzzlephp.org\/en\/stable\/request\u002Doptions.html\u003E",
+            "summary": "Replace\u0020Guzzle\u0020http\u0020call\u0020options\u0020with\u0020a\u0020new\u0020set",
             "url": "classes/Porta-Billing-Interfaces-ConfigInterface.html#method_setOptions"
         },                {
             "fqsen": "\\Porta\\Billing\\Interfaces\\ConfigInterface\u003A\u003AgetSessionRefreshMargin\u0028\u0029",
@@ -301,20 +316,50 @@ Search.appendIndex(
             "summary": "Interface\u0020for\u0020session\u0020storage",
             "url": "classes/Porta-Billing-Interfaces-SessionStorageInterface.html"
         },                {
+            "fqsen": "\\Porta\\Billing\\Interfaces\\SessionStorageInterface\u003A\u003Aclean\u0028\u0029",
+            "name": "clean",
+            "summary": "Cleans\u0020the\u0020billing\u0020session\u0020data\u0020from\u0020storage.",
+            "url": "classes/Porta-Billing-Interfaces-SessionStorageInterface.html#method_clean"
+        },                {
+            "fqsen": "\\Porta\\Billing\\Interfaces\\SessionStorageInterface\u003A\u003Aload\u0028\u0029",
+            "name": "load",
+            "summary": "Loads\u0020the\u0020session\u0020data\u0020from\u0020storage\u0020and\u0020return\u0020it",
+            "url": "classes/Porta-Billing-Interfaces-SessionStorageInterface.html#method_load"
+        },                {
+            "fqsen": "\\Porta\\Billing\\Interfaces\\SessionStorageInterface\u003A\u003Asave\u0028\u0029",
+            "name": "save",
+            "summary": "Saves\u0020session\u0020data\u0020to\u0020storage.\u0020Implementation\u0020should\u0020rely\u0020that\u0020the\u0020storage\nwas\u0020locked\u0020by\u0020\u0024this\u002D\u003Elock\u0028\u0029\u0020call,\u0020write\u0020and\u0020release\u0020after\u0020the\u0020lock.",
+            "url": "classes/Porta-Billing-Interfaces-SessionStorageInterface.html#method_save"
+        },                {
+            "fqsen": "\\Porta\\Billing\\Interfaces\\SessionStorageInterface\u003A\u003AstartUpdate\u0028\u0029",
+            "name": "startUpdate",
+            "summary": "Called\u0020by\u0020biling\u0020session\u0020manager\u0020process\u0020when\u0020it\u0020start\u0020to\u0020refresh\u0020token\/relogin",
+            "url": "classes/Porta-Billing-Interfaces-SessionStorageInterface.html#method_startUpdate"
+        },                {
             "fqsen": "\\Porta\\Billing\\Session\\SessionFileStorage",
             "name": "SessionFileStorage",
-            "summary": "Use\u0020file\u0020as\u0020session\u0020data\u0020storage.\u0020Useful\u0020for\u0020server\u0020applications\u0020which\u0020use\u0020one\naccount\u0020to\u0020access\u0020the\u0020billing\u0020and\u0020share\u0020the\u0020session\u0020auth\u0020data.",
+            "summary": "Use\u0020file\u0020as\u0020session\u0020data\u0020storage.",
             "url": "classes/Porta-Billing-Session-SessionFileStorage.html"
+        },                {
+            "fqsen": "\\Porta\\Billing\\Session\\SessionFileStorage\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Setup\u0020storage\u0020to\u0020use\u0020file",
+            "url": "classes/Porta-Billing-Session-SessionFileStorage.html#method___construct"
         },                {
             "fqsen": "\\Porta\\Billing\\Session\\SessionNoStorage",
             "name": "SessionNoStorage",
-            "summary": "Dummy\u0020storage\u0020to\u0020use\u0020when\u0020no\u0020storage\u0020given.",
+            "summary": "Dummy\u0020storage\u0020to\u0020use\u0020when\u0020no\u0020persistent\u0020session\u0020need.",
             "url": "classes/Porta-Billing-Session-SessionNoStorage.html"
         },                {
             "fqsen": "\\Porta\\Billing\\Session\\SessionPHPSessionStorage",
             "name": "SessionPHPSessionStorage",
             "summary": "Class\u0020to\u0020use\u0020PHP\u0020Session\u0020storage.",
             "url": "classes/Porta-Billing-Session-SessionPHPSessionStorage.html"
+        },                {
+            "fqsen": "\\Porta\\Billing\\Session\\SessionPHPSessionStorage\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Setup\u0020class",
+            "url": "classes/Porta-Billing-Session-SessionPHPSessionStorage.html#method___construct"
         },                {
             "fqsen": "\\",
             "name": "\\",

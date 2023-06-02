@@ -57,7 +57,7 @@ interface ConfigInterface {
     public const ESPF_BASE = '/espf/v1';
 
     /**
-     * Provides base server URI for all services like 'https://host.dom', no trailing slash.
+     * Provides base server URI for all services like `'https://host.dom'`, no trailing slash.
      *
      * @return string
      * @api
@@ -65,7 +65,7 @@ interface ConfigInterface {
     public function getUrl(): string;
 
     /**
-     * Provides API base path, default is '/rest', no trailig shash
+     * Provides API base path, default is '/rest', no trailig slash
      *
      * @return string
      * @api
@@ -73,7 +73,7 @@ interface ConfigInterface {
     public function getAPIPath(): string;
 
     /**
-     * Provides ESPF base path, default is '/espf/v1', no trailig shash
+     * Provides ESPF base path, default is '/espf/v1', no trailig slash
      *
      * @return string
      * @api
@@ -81,12 +81,14 @@ interface ConfigInterface {
     public function getEspfPath(): string;
 
     /**
-     * Returns true if accound record present in the config and correct.
+     * Returns true if accound record present in the config and it's correct.
      *
-     * Billing casses rely on account data is checked for consistency in the ConfigInterface class.
-     * Consistency mean that a pair of login+password or login+token present.
+     * Billing classes rely on account data is checked for consistency in the
+     * ConfigInterface class. Consistency mean that a pair of login+password or
+     * login+token present.
      *
-     * Billing class will not check it and send as is, generating API failure if the data is wrong.
+     * Billing class will not check it and send as is, generating API failure if
+     * the data is wrong.
      *
      * @return bool
      * @api
@@ -105,8 +107,9 @@ interface ConfigInterface {
     /**
      * Sets account record. Exception if the record is inconsistent
      *
-     * @param array|null $account must have a pair of keys: 'account'+'password' or 'account'+'token'.
-     * null to clear account record out.
+     * @param array|null $account must have a pair of keys: 'account'+'password'
+     * or 'account'+'token', null to clear account record out.
+     *
      * @return self for chaining
      * @throws PortaAuthException
      * @api
@@ -115,7 +118,8 @@ interface ConfigInterface {
 
     /**
      * Provides Gizzle http call options
-     * Be careful and consult Guzzle docs: <https://docs.guzzlephp.org/en/stable/request-options.html>
+     *
+     * Be careful and consult [Guzzle docs on request options](https://docs.guzzlephp.org/en/stable/request-options.html)
      *
      * @return array to be passed to Guzzle
      * @api
@@ -124,7 +128,8 @@ interface ConfigInterface {
 
     /**
      * Replace Guzzle http call options with a new set
-     * Be careful and consult Guzzle docs: <https://docs.guzzlephp.org/en/stable/request-options.html>
+     *
+     * Be careful and consult [Guzzle docs on request options](https://docs.guzzlephp.org/en/stable/request-options.html)
      *
      * @param array $options - new options set
      * @return self - for chaining

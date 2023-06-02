@@ -13,11 +13,16 @@ use Porta\Billing\Interfaces\SessionStorageInterface;
 /**
  * Class to use PHP Session storage.
  *
- * Mind that use of session locks any other php request from the same session
- * will wait for session unlocked and this implementation rey on that.
+ * Use of session locks any other php request with the same session.
+ * It will wait for session unlocked and this implementation rely on that.
  *
- * If you use session_write_close() to release the session, please do it AFTER
- * the billing ombject setup for it may login or refresh token safe way.
+ * If you use session_write_close() to release the session, please do it **after**
+ * the wrapper setup for it may login or refresh token and save it safe way.
+ *
+ * Also, keep in mind that Billing may return auth error even session token is
+ * not yet expired. When credentials given to config, SessionManager transparently
+ * relogins. But if you have PHP session already released, new token will **not**
+ * be stored in the session after refresh/relogin.
  *
  * @api
  * @package SessionStorage
@@ -28,6 +33,14 @@ class SessionPHPSessionStorage implements SessionStorageInterface {
 
     protected $sessionName;
 
+    /**
+     * Setup class
+     *
+     * @param string $sessionName Optional session name to start if it is not
+     * yet started.
+     *
+     * @api
+     */
     public function __construct(string $sessionName = null) {
         $this->sessionName = $sessionName;
     }

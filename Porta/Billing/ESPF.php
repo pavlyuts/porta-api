@@ -17,6 +17,18 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Wrapper for ESPF API
  *
+ * The class is intended to provide interface to Portaone ESPF API. It handles
+ * authorisation, access token management and ESPF call handling.
+ * It needs:
+ * - {@see ConfigInterface} object as billing server host, account and call options configuration.
+ * - {@see SessionStorageInterface} object to store session data between invocanions.
+ *
+ * The difference ESPF to API call is that ESPF returns HTTP 40x codes in a case
+ * of request failure. These codes will throw {@see PortaESPFException}. Meaning
+ * of each code depends of endpoint called.
+ *
+ * See 'API documentation' section on <https://docs.portaone.com>
+ *
  * @api
  * @package Billing
  */
@@ -24,14 +36,16 @@ class ESPF extends Components\BillingBase {
 
     /**
      * @inherit
-     * @api
+     * @package Billing
      */
     public function __construct(ConfigInterface $config, ?SessionStorageInterface $storage = null) {
         parent::__construct($config, $storage);
     }
 
     /**
-     * GET request, params will be send as query string
+     * GET ESPF request
+     *
+     * Params will be encoded and send as query string
      *
      * @param string $endpoint endpoint to call
      * @param array $params associative array of params, may omit
@@ -46,7 +60,9 @@ class ESPF extends Components\BillingBase {
     }
 
     /**
-     * POST request, params will be sent as JSON body
+     * POST ESPF request
+     *
+     * Params will be encoded and sent as JSON body
      *
      * @param string $endpoint endpoint to call
      * @param array $params associative array of params, may omit
@@ -61,7 +77,9 @@ class ESPF extends Components\BillingBase {
     }
 
     /**
-     * PUT request, params mandatory and will be sent as JSON body
+     * PUT ESPF request
+     *
+     * Params are mandatory and will be encoded and sent as JSON body
      *
      * @param string $endpoint endpoint to call
      * @param array $params associative array of params, mandatory
@@ -76,7 +94,11 @@ class ESPF extends Components\BillingBase {
     }
 
     /**
-     * DELETE request, no params
+     * DELETE ESPF request
+     *
+     * DELETE has no params, only endpoint. It returns HTTP 200 on success
+     * and 40x on failure, so the methid wil return nothing on success and throw
+     * PortaESPFException on error.
      *
      * @param string $endpoint endpoint to call
      * @return void

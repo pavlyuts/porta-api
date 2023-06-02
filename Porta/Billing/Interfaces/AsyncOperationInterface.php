@@ -13,8 +13,15 @@ use Porta\Billing\Exceptions\PortaException;
 /**
  * Interface for element of bulk async call to the billing. Represents one API call task.
  *
- * Used by Billing->callAsync() as array element.
- * See AsyncOperaton implementation.
+ * How it works:
+ * - callAsync() crawl given iterable recursively to find all objects, implementing AsyncOperationInterface
+ * - For each object, it will get the API endpoint by calling `getCallEndpoint()` and call params by calling `getCallParams()`
+ * - All the found array will be called in parallel with respect to desired concurrency level
+ * - For each object:
+ *     - if the call was succed, the result will put to the object by call processResponse()
+ *     - in a case of failure exception object will put to the object by calling processException()
+ *
+ * Finally we have each object filled with call result, good or bad.
  *
  * @api
  * @package Async

@@ -11,7 +11,7 @@ namespace Porta\Billing\Session;
 use Porta\Billing\Interfaces\SessionStorageInterface;
 
 /**
- * Dummy storage to use when no storage given.
+ * Dummy storage to use when no persistent session need.
  *
  * Do nothing, store nothing, Billing class logins each time as instantiated.
  * Used by default if no storage class given.

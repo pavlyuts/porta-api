@@ -131,16 +131,20 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Session/SessionPHPSessionStorage.php"><a href="files/session-sessionphpsessionstorage.html"><abbr title="Session/SessionPHPSessionStorage.php">SessionPHPSessionStorage.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
             <p class="phpdocumentor-summary">Class to use PHP Session storage.</p>
 
-    <section class="phpdocumentor-description"><p>Mind that use of session locks any other php request from the same session
-will wait for session unlocked and this implementation rey on that.</p>
-<p>If you use session_write_close() to release the session, please do it AFTER
-the billing ombject setup for it may login or refresh token safe way.</p>
+    <section class="phpdocumentor-description"><p>Use of session locks any other php request with the same session.
+It will wait for session unlocked and this implementation rely on that.</p>
+<p>If you use session_write_close() to release the session, please do it <strong>after</strong>
+the wrapper setup for it may login or refresh token and save it safe way.</p>
+<p>Also, keep in mind that Billing may return auth error even session token is
+not yet expired. When credentials given to config, SessionManager transparently
+relogins. But if you have PHP session already released, new token will <strong>not</strong>
+be stored in the session after refresh/relogin.</p>
 </section>
 
 
@@ -162,6 +166,20 @@ the billing ombject setup for it may login or refresh token safe way.</p>
     </dl>
 
 
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                        <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Porta-Billing-Session-SessionPHPSessionStorage.html#method___construct">__construct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Setup class</dd>
+
+        </dl>
 
 
 
@@ -169,7 +187,59 @@ the billing ombject setup for it may login or refresh token safe way.</p>
 
         
 
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/Porta-Billing-Session-SessionPHPSessionStorage.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/Porta-Billing-Session-SessionPHPSessionStorage.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Session/SessionPHPSessionStorage.php"><a href="files/session-sessionphpsessionstorage.html"><abbr title="Session/SessionPHPSessionStorage.php">SessionPHPSessionStorage.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">44</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Setup class</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionName</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sessionName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Optional session name to start if it is not
+yet started.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
         
+    
+</article>
+            </section>
+
         
     <script type="text/javascript">
         function loadExternalCodeSnippets(line) {
