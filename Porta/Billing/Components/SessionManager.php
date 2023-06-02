@@ -59,17 +59,29 @@ class SessionManager {
         return $this->sessionData->getTokenDecoder()->getLogin();
     }
 
-    public function checkSession(): bool {
-        if (!$this->isSessionUp()) {
-            return false;
+    /**
+     * Does active sesson check to billing server, relogin if required
+     *
+     * Completes 'Session/ping' call to check session state, then:
+     *
+     * - If session not recognised, and ccredentials present, trying to relogin
+     * - If no credentials in config or login failure - throws auth exception
+     *
+     * @throws PortaAuthException
+     */
+    public function checkSession(): void {
+        if ($this->isSessionPresent()) {
+            $response = $this->client->request('POST', $this->config->getAPIPath() . '/Session/ping',
+                    [RO::JSON => [SessionClient::PARAMS => [SessionData::ACCESS_TOKEN => $this->sessionData->getAccessToken()]]]);
+            if (200 != $response->getStatusCode()) {
+                throw PortaApiException::createFromResponse($response);
+            }
+            $answer = SessionClient::jsonResponse($response);
+            if (0 < ($answer['user_id'] ?? 0)) {
+                return;
+            }
         }
-        $response = $this->client->request('POST', $this->config->getAPIPath() . '/Session/ping',
-                [RO::JSON => [SessionClient::PARAMS => [SessionData::ACCESS_TOKEN => $this->sessionData->getAccessToken()]]]);
-        if (200 != $response->getStatusCode()) {
-            throw PortaApiException::createFromResponse($response);
-        }
-        $answer = SessionClient::jsonResponse($response);
-        return (($answer['user_id'] ?? 0) > 0);
+        $this->relogin();
     }
 
     public function relogin(): void {

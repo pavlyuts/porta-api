@@ -241,11 +241,11 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
     }
 
     public function testChecksession() {
-        $conf = (new Config('host.dom'))->setOptions(
+        $conf = (new Config('host.dom', self::ACCOUNT))->setOptions(
                 $this->prepareRequests([
-                    new Response(200, [], '{"user_id": 0}'),
                     new Response(200, [], '{"user_id": 10}'),
-                    new Response(200, [], '{}'),
+                    new Response(200, [], '{"user_id": 0}'),
+                    new Response(200, [], json_encode(PortaToken::createLoginData(7600))),
                     new Response(500, [], '{"faultcode": "Server.failed", "faultstring": "Somenting goes wrong"}'),
                         ]
                 )
@@ -253,11 +253,14 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage(PortaToken::createLoginData(7200));
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertFalse($s->checkSession());
-        $this->assertTrue($s->checkSession());
-        $this->assertFalse($s->checkSession());
+        // Successfull check
+        $s->checkSession();
+        // Succesfull relogin
+        $s->checkSession();
+        // Server fail on relogin
         $this->expectException(\Porta\Billing\Exceptions\PortaApiException::class);
         $s->checkSession();
+        $this->assertEquals(4, count($this->container));
     }
 
 }

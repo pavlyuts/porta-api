@@ -94,6 +94,19 @@ abstract class BillingBase {
     public function isSessionPresent(): bool {
         return $this->session->isSessionPresent();
     }
+
+    /**
+     * Does active sesson check to billing server, relogin if required
+     *
+     * Completes 'Session/ping' call to check session state, then:
+     * - If session not recognised, and ccredentials present, trying to relogin
+     * - If no credentials in config or login failure - throws auth exception
+     *
+     * @throws PortaAuthException on relogin failed or no credentilas
+     * @api
+     */
+    public function checkSession(): void {
+        $this->session->checkSession();
     }
 
     /**

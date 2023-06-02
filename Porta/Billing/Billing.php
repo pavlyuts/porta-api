@@ -86,9 +86,7 @@ class Billing extends BillingBase {
      * @api
      */
     public function callAsync(iterable $operations, int $concurency = 20): void {
-        if (!$this->session->checkSession()) {
-            $this->session->relogin();
-        }
+        $this->session->checkSession();
 
         $tasksIterator = function () use ($operations) {
             yield from $this->renderArrayForAsyncCall($operations);
