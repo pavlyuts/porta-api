@@ -7,6 +7,7 @@
  */
 
 namespace PortaApiTest\Tools;
+
 use Porta\Billing\Interfaces\SessionStorageInterface;
 
 /**
@@ -23,7 +24,7 @@ class SessionPHPClassStorage implements SessionStorageInterface {
         $this->allowUpdate = $allowUpdate;
     }
 
-    public function clean() {
+    public function clean(): void {
         $this->storage = null;
     }
 
@@ -31,7 +32,7 @@ class SessionPHPClassStorage implements SessionStorageInterface {
         return $this->storage;
     }
 
-    public function save(array $session) {
+    public function save(array $session): void {
         $this->storage = $session;
     }
 
