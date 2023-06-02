@@ -85,51 +85,56 @@ class Billing extends BillingBase {
      * @throws PortaAuthException
      * @api
      */
-    public function callAsync(iterable $operations, int $concurency = 20) {
-        /** @var AsyncOperationInterface[] $operations */
-        $this->checkAsyncObjectList($operations);
+    public function callAsync(iterable $operations, int $concurency = 20): void {
         if (!$this->session->checkSession()) {
-            throw new PortaAuthException("No active session to run async request");
+            $this->session->relogin();
         }
 
         $tasksIterator = function () use ($operations) {
-            /** @var AsyncOperationInterface[] $operations */
-            foreach ($operations as $operation) {
-                if (null === $operation->getCallEndpoint()) {
-                    continue;
-                } else {
-                    $func = function () use ($operation) {
-                        /** @var AsyncOperationInterface[] $operations */
-                        //$callData = $operations[$index]->getCall();
-                        return $promise = $this->requestAsync(
-                                'POST',
-                                $operation->getCallEndpoint(),
-                                Billing::prepareParamsJson($operation->getCallParams())
-                        )
-                        ->then(
-                        function (Response $response) use ($operation) {
-                            if (200 == $response->getStatusCode()) {
-                                try {
-                                    $operation->processResponse(static::processResponse($response));
-                                } catch (PortaException $ex) {
-                                    $operation->processException($ex);
-                                }
-                            } else {
-                                $operation->processException(PortaApiException::createFromResponse($response));
-                            }
-                        },
-                        function (\GuzzleHttp\Exception\ConnectException $reason) use ($operation) {
-                            $operation->processException(new PortaConnectException($reason->getMessage(), $reason->getCode()));
-                        }
-                        );
-                    };
-                    yield $func;
-                }
-            }
+            yield from $this->renderArrayForAsyncCall($operations);
         };
+
         $pool = new Pool($this->client, $tasksIterator(), ['concurrency' => $concurency]);
         $promise = $pool->promise();
         $promise->wait();
+    }
+
+    protected function renderArrayForAsyncCall(iterable $operations) {
+        foreach ($operations as $item) {
+            if (is_iterable($item)) {
+                yield from $this->renderArrayForAsyncCall($item);
+            }
+            if (($item instanceof AsyncOperationInterface) && !is_null($item->getCallEndpoint())) {
+                yield from $this->yieldAsyncOperation($item);
+            }
+        }
+    }
+
+    protected function yieldAsyncOperation(AsyncOperationInterface $operation) {
+        $func = function () use ($operation) {
+            return $promise = $this->requestAsync(
+                    'POST',
+                    $operation->getCallEndpoint(),
+                    Billing::prepareParamsJson($operation->getCallParams())
+            )
+            ->then(
+            function (Response $response) use ($operation) {
+                if (200 == $response->getStatusCode()) {
+                    try {
+                        $operation->processResponse(static::processResponse($response));
+                    } catch (PortaException $ex) {
+                        $operation->processException($ex);
+                    }
+                } else {
+                    $operation->processException(PortaApiException::createFromResponse($response));
+                }
+            },
+            function (\GuzzleHttp\Exception\ConnectException $reason) use ($operation) {
+                $operation->processException(new PortaConnectException($reason->getMessage(), $reason->getCode()));
+            }
+            );
+        };
+        yield $func;
     }
 
     /**

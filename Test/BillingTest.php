@@ -132,18 +132,23 @@ class BillingTest extends Tools\RequestTestCase {
         $r = $b->call('/NoMatter');
     }
 
-    /**
-     * covers \Porta\Billing\Billing::callAsync
-     */
     public function testAsyncCall() {
         $list = [
             'key1' => new AsyncOperation('/test1', []),
-            'key2' => new AsyncOperation('/test2', ['paramKey2' => 'paramValue2']),
+            'key2' => [
+                new AsyncOperation('/test2-0', ['paramKey2-0' => 'paramValue2-0']),
+                new AsyncOperation('/test2-1', ['paramKey2-1' => 'paramValue2-1'])
+            ],
+            'noop1' => 'scalar',
             'key3' => new AsyncOperation('/test3', ['paramKey3' => 'paramValue3']),
             'key4' => new AsyncOperation('/test4', ['paramKey4' => 'paramValue4']),
             'keyNull' => new Tools\AsyncOperationNull(),
             'key5' => new AsyncOperation('/test5', ['paramKey5' => 'paramValue5']),
             'key6' => new AsyncOperation('/test6', []),
+            'noop2' => [
+                new \stdClass(),
+                'noop2-1' => [],
+            ],
             'key7' => new AsyncOperation('/test7', ['paramKey7' => 'paramValue7']),
             'key8' => new AsyncOperation('/test8', ['paramKey8' => 'paramValue8']),
         ];
@@ -151,7 +156,8 @@ class BillingTest extends Tools\RequestTestCase {
                 $this->prepareRequests([
                     new Response(200, ['content-type' => 'application/json'], '{"user_id":1}'),
                     new Response(200, ['content-type' => 'application/json'], '{}'),
-                    new Response(200, ['content-type' => 'application/json'], '{"answerKey2":"answerData2"}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"answerKey2-0":"answerData2-0"}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"answerKey2-1":"answerData2-1"}'),
                     new Response(200, ['content-type' => 'application/json'], '{"answerKey3":"answerData3"}'),
                     new Response(200, ['content-type' => 'application/json'], '{"answerKey4":"answerData4"}'),
                     new Response(500,
@@ -160,6 +166,7 @@ class BillingTest extends Tools\RequestTestCase {
                     new \GuzzleHttp\Exception\ConnectException("Connection fail", new \GuzzleHttp\Psr7\Request('GET', '/test')),
                     new Response(200, ['content-type' => 'application/json'], '{"answerKey7":"answerData7"}'),
                     new Response(200, [], '{"answerKey8":"answerData8"}'),
+                    new Response(200, ['content-type' => 'application/json'], '{"user_id":1}'),
         ]));
         $storage = new Tools\SessionPHPClassStorage(PortaToken::createLoginData(7200));
 
@@ -175,8 +182,10 @@ class BillingTest extends Tools\RequestTestCase {
         $this->assertTrue($list['key1']->success());
         $this->assertEquals([], $list['key1']->getResponse());
 
-        $this->assertTrue($list['key2']->success());
-        $this->assertEquals(['answerKey2' => 'answerData2'], $list['key2']->getResponse());
+        $this->assertTrue($list['key2'][0]->success());
+        $this->assertEquals(['answerKey2-0' => 'answerData2-0'], $list['key2'][0]->getResponse());
+        $this->assertTrue($list['key2'][1]->success());
+        $this->assertEquals(['answerKey2-1' => 'answerData2-1'], $list['key2'][1]->getResponse());
 
         $this->assertTrue($list['key3']->success());
         $this->assertEquals(['answerKey3' => 'answerData3'], $list['key3']->getResponse());
@@ -195,6 +204,8 @@ class BillingTest extends Tools\RequestTestCase {
 
         $this->assertFalse($list['key8']->success());
         $this->assertInstanceOf(\Porta\Billing\Exceptions\PortaException::class, $list['key8']->getException());
+
+        $b->callAsync([]);
     }
 
     public function testWrongAsyncClassTypeException() {
