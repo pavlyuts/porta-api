@@ -21,7 +21,7 @@ use Porta\Billing\Interfaces\SessionStorageInterface;
  */
 class SessionNoStorage implements SessionStorageInterface {
 
-    public function clean() {
+    public function clean(): void {
 
     }
 
@@ -33,7 +33,7 @@ class SessionNoStorage implements SessionStorageInterface {
         return true;
     }
 
-    public function save(array $session) {
+    public function save(array $session): void {
 
     }
 

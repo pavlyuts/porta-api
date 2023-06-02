@@ -22,8 +22,8 @@ class SessionFileStorage implements SessionStorageInterface {
 
     const UPD_POSTFIX = '.update';
 
-    protected $fileName;
-    protected $timeout;
+    protected string $fileName;
+    protected float $timeout;
     protected $lock = false;
 
     public function __destruct() {
@@ -37,7 +37,8 @@ class SessionFileStorage implements SessionStorageInterface {
         $this->timeout = $timeout / 1000;
     }
 
-    public function clean() {
+    /** @inherit */
+    public function clean(): void {
         if (file_exists($this->fileName)) {
             @unlink($this->fileName);
         }
@@ -68,7 +69,8 @@ class SessionFileStorage implements SessionStorageInterface {
         return null;
     }
 
-    public function save(array $session) {
+    /** @inherit */
+    public function save(array $session): void {
         if (!$this->lock) {
             throw new PortaException("Must lock before save");
         }

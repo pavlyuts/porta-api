@@ -21,7 +21,7 @@ interface SessionStorageInterface {
      *
      * Called after implicit logoff
      */
-    public function clean();
+    public function clean(): void;
 
     /**
      * Loads the session data from storage and return it
@@ -39,7 +39,7 @@ interface SessionStorageInterface {
      *
      * @param array $session data to save
      */
-    public function save(array $session);
+    public function save(array $session): void;
 
     /**
      * If session data stroage is shared over different processes with async start,

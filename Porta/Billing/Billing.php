@@ -162,13 +162,13 @@ class Billing extends BillingBase {
      * @throws PortaApiException on API returned an error
      * @api
      */
-    public function callList(string $endpoint, array $params = []) {
+    public function callList(string $endpoint, array $params = []): array {
         $answer = $this->call($endpoint, $params);
         $keys = array_keys($answer);
         return (count($keys) > 1) ? $answer : $answer[$keys[0]];
     }
 
-    protected static function processResponse(Response $response) {
+    protected static function processResponse(Response $response): array {
         switch (static::detectContentType($response)) {
             case 'application/json':
                 return static::jsonResponse($response);
@@ -185,7 +185,7 @@ class Billing extends BillingBase {
         return $parsed[0][0] ?? 'unknown';
     }
 
-    protected static function extractFile(Response $response) {
+    protected static function extractFile(Response $response): array {
         $parsed = Header::parse($response->getHeader('content-disposition'));
         if ((($parsed[0][0] ?? '') != 'attachment') || !isset($parsed[0]['filename'])) {
             throw new PortaException("Invalid file content-disposition header");
@@ -220,20 +220,12 @@ class Billing extends BillingBase {
         throw PortaApiException::createFromResponse($response);
     }
 
-    protected static function prepareParamsJson(array $params) {
+    protected static function prepareParamsJson(array $params): array {
         return [
             RequestOptions::JSON => [
                 SessionClient::PARAMS => ([] == ($params ?? [])) ? new \stdClass() : $params,
             ]
         ];
-    }
-
-    protected function checkAsyncObjectList(iterable $operations) {
-        foreach ($operations as $operation) {
-            if (!($operation instanceof AsyncOperationInterface)) {
-                throw new PortaException("Objects for async call should implement AsyncOperationInterface");
-            }
-        }
     }
 
 }
