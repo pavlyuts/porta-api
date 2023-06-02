@@ -41,13 +41,13 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
 
         $s = new SessionManager($conf, $client, $storage);
 
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
         $this->assertEquals(['Authorization' => 'Bearer ' . $sessionData->getAccessToken()], $s->getAuthHeader());
         $this->assertEquals('userName', $s->getUsername());
 
         //Logout
         $s->logout();
-        $this->assertFalse($s->isSessionUp());
+        $this->assertFalse($s->isSessionPresent());
         $this->assertEquals([], $s->getAuthHeader());
         $this->assertNull($s->getUsername());
         $request = $this->getRequst(0);
@@ -66,8 +66,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
 
-        $this->assertFalse($s->isSessionUp());
-        $this->assertFalse($s->checkSession());
+        $this->assertFalse($s->isSessionPresent());
     }
 
     public function testLogin() {
@@ -83,7 +82,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $s = new SessionManager($conf, $client, $storage);
 
         $s->login(self::ACCOUNT);
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
         $request = $this->getRequst(0);
         $this->assertEquals('https://host.dom/rest/Session/login', (string) $request->getUri());
         $this->assertEquals([], $request->getHeader('Authorization'));
@@ -151,7 +150,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage(PortaToken::createLoginData(100), false);
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
     }
 
     public function testTokenRefreshSuccess() {
@@ -160,7 +159,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage(PortaToken::createLoginData(101));
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
 
         // Then should refresh it it is within margin
         $updateData = new SessionData(PortaToken::createLoginData(7600));
@@ -181,7 +180,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $this->assertEquals(
                 ['params' => [SessionData::REFRESH_TOKEN => $sessionData->getRefreshToken()]],
                 json_decode($request->getBody(), true));
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
         $this->assertEquals(['Authorization' => 'Bearer ' . $updateData->getAccessToken()], $s->getAuthHeader());
     }
 
@@ -197,7 +196,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage($sessionData->getData());
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertFalse($s->isSessionUp());
+        $this->assertFalse($s->isSessionPresent());
     }
 
     public function testTockenRefreshFailedRelogin() {
@@ -213,7 +212,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage($sessionData->getData());
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
     }
 
     public function testTikenExpiredNoAccount() {
@@ -222,7 +221,7 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage($sessionData->getData());
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertFalse($s->isSessionUp());
+        $this->assertFalse($s->isSessionPresent());
         // Relogin with no account throws exception
         $this->expectException(\Porta\Billing\Exceptions\PortaAuthException::class);
         $s->relogin();
@@ -234,11 +233,11 @@ class SessionManagerTest extends \PortaApiTest\Tools\RequestTestCase {
         $storage = new SessionPHPClassStorage($sessionData->getData(), false);
         $client = new SessionClient($conf);
         $s = new SessionManager($conf, $client, $storage);
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
         // Relogin with no account throws exception
         $conf->setAccount(self::ACCOUNT);
         $s->relogin();
-        $this->assertTrue($s->isSessionUp());
+        $this->assertTrue($s->isSessionPresent());
     }
 
     public function testChecksession() {

@@ -49,7 +49,7 @@ class BillingTest extends Tools\RequestTestCase {
         $storage = new Tools\SessionPHPClassStorage();
 
         $b = new Billing($conf, $storage);
-        $this->assertTrue($b->isSessionUp());
+        $this->assertTrue($b->isSessionPresent());
         $this->assertEquals($sessionData, $storage->load());
 
         $r = $b->call('/NoMatter', $testJsonData);

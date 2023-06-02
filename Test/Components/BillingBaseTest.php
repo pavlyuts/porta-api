@@ -27,17 +27,20 @@ class BillingBaseTest extends \PortaApiTest\Tools\RequestTestCase {
                         [
                             new Response(200),
                             new Response(200, [], json_encode(PortaToken::createLoginData(7200))),
+                            new Response(200, [], '{"user_id": 10}'),
                         ]
         ));
         $storage = new SessionPHPClassStorage(PortaToken::createLoginData(7200));
         /** @var BillingBase $b */
         $b = $this->getMockForAbstractClass(BillingBase::class, [$config, $storage]);
-        $this->assertTrue($b->isSessionUp());
+        $this->assertTrue($b->isSessionPresent());
         $this->assertEquals('userName', $b->getUsername());
         $b->logout();
-        $this->assertFalse($b->isSessionUp());
+        $this->assertFalse($b->isSessionPresent());
         $b->login(self::ACCOUNT);
-        $this->assertTrue($b->isSessionUp());
+        $this->assertTrue($b->isSessionPresent());
+        $b->checkSession();
+        $this->assertEquals(3, count($this->container));
     }
 
 }

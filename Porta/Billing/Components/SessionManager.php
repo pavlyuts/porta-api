@@ -101,7 +101,7 @@ class SessionManager {
         $this->sessionDrop();
     }
 
-    public function isSessionUp(): bool {
+    public function isSessionPresent(): bool {
         return $this->sessionData->isSet();
     }
 
@@ -163,7 +163,7 @@ class SessionManager {
 
     protected function sessionLoad(): void {
         $this->sessionData->setData($this->storage->load());
-        if ($this->isSessionUp()) {
+        if ($this->isSessionPresent()) {
             switch ($this->checkToken()) {
                 case self::TOKEN_GOOD:
                     return;

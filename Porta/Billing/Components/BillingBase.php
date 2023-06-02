@@ -79,16 +79,21 @@ abstract class BillingBase {
     }
 
     /**
-     * Return true if session is up
+     * Returns true if session data exit and not expired
      *
      * Returns true if session data (token) exists and not expired, false if
      * not logged in for any reason.
      *
+     * Does not complete active sesion check to the server. Due of serveer configuratioin
+     * issues token may be invalidated for inactivity before it's expire time really
+     * has come. So, positive isSessionUp() only means persistent session data loaded,
+     *
      * @return bool
      * @api
      */
-    public function isSessionUp(): bool {
-        return $this->session->isSessionUp();
+    public function isSessionPresent(): bool {
+        return $this->session->isSessionPresent();
+    }
     }
 
     /**
@@ -104,7 +109,7 @@ abstract class BillingBase {
     }
 
     protected function request(string $method, $uri = '', array $options = []): Response {
-        if ($this->isSessionUp()) {
+        if ($this->isSessionPresent()) {
             $response = $this->client->request($method, $this->buildUri($uri), $options);
             if (200 == $response->getStatusCode()) {
                 return $response;

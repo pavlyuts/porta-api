@@ -86,7 +86,7 @@ class Live extends \PHPUnit\Framework\TestCase {
 
     public function testLogout() {
         self::$billing->logout();
-        $this->assertFalse(self::$billing->isSessionUp());
+        $this->assertFalse(self::$billing->isSessionPresent());
     }
 
 }
