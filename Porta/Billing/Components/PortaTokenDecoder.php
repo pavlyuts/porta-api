@@ -11,7 +11,7 @@ namespace Porta\Billing\Components;
 /**
  * Class to manage Portaone JWT token
  *
- * @internal 
+ * @internal
  */
 class PortaTokenDecoder implements \ArrayAccess {
 
@@ -22,7 +22,7 @@ class PortaTokenDecoder implements \ArrayAccess {
     }
 
     public function setToken(?string $token = null): self {
-            $this->decoded = @json_decode(base64_decode(explode('.', $token)[1] ?? 'null'), true) ?? [];
+        $this->decoded = @json_decode(base64_decode(explode('.', $token)[1] ?? 'null'), true) ?? [];
 //        if (is_null($token)) {
 //            $this->decoded = [];
 //        } else {
