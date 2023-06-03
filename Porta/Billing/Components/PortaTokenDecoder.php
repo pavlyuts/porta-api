@@ -59,6 +59,7 @@ class PortaTokenDecoder implements \ArrayAccess {
         return isset($this->decoded[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset) {
         return $this->decoded[$offset] ?? null;
     }
